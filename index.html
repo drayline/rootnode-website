@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>root.node — The Architecture System for Claude Projects</title>
+<meta name="description" content="19 free Skills that diagnose, build, and optimize every layer of a Claude Project. Structural diagnostics, behavioral tuning, and compilation from tested components.">
+<meta name="keywords" content="Claude Projects, AI project architecture, prompt engineering, Claude Skills, system prompt design, context engineering">
+<link rel="canonical" href="https://rootnode.design/">
+<meta property="og:title" content="root.node — The Architecture System for Claude Projects">
+<meta property="og:description" content="19 free Skills that diagnose, build, and optimize every layer of a Claude Project.">
+<meta property="og:image" content="https://rootnode.design/og-image.png">
+<meta property="og:url" content="https://rootnode.design/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="root.node — The Architecture System for Claude Projects">
+<meta name="twitter:description" content="19 free Skills for Claude Project architecture.">
+<meta name="twitter:image" content="https://rootnode.design/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"root.node","description":"The architecture system for Claude Projects. 19 Skills that diagnose, build, and optimize every layer of a Claude Project.","applicationCategory":"DeveloperApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"Drayline","url":"https://drayline.io"},"url":"https://rootnode.design","downloadUrl":"https://github.com/drayline/rootnode-skills"}</script>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ DESIGN TOKENS ============ */
+:root {
+  --dark-950: #0A0C0F;
+  --dark-900: #0D0F12;
+  --dark-800: #161A1F;
+  --dark-700: #1E2329;
+  --dark-600: #2A3038;
+  --white: #FFFFFF;
+  --gray-300: #B0B8C4;
+  --gray-400: #8B929E;
+  --gray-500: #7A7B80;
+  --gold-500: #CC8A0A;
+  --gold-400: #E5A318;
+  --gold-600: #A67208;
+
+  /* Scope colors */
+  --scope-global: #58a6ff;
+  --scope-project: #d29922;
+  --scope-conversation: #3fb950;
+  --scope-cross: #bc8cff;
+
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', monospace;
+
+  --text-display: 3rem;
+  --text-h1: 2.25rem;
+  --text-h2: 1.75rem;
+  --text-h3: 1.375rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: 8rem;
+
+  --max-width: 1200px;
+  --content-narrow: 720px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 200ms;
+  --duration-medium: 400ms;
+  --duration-slow: 700ms;
+
+  --border-subtle: 1px solid var(--dark-700);
+}
+
+/* ============ RESET ============ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { font-family: var(--font-body); font-size: var(--text-body); font-weight: 400; line-height: 1.6; color: var(--gray-300); background: var(--dark-900); overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+img, svg { display: block; max-width: 100%; }
+.skip-link { position: absolute; top: -100%; left: var(--space-sm); padding: var(--space-xs) var(--space-sm); background: var(--gold-500); color: var(--dark-950); font-weight: 600; z-index: 1000; border-radius: 4px; }
+.skip-link:focus { top: var(--space-sm); }
+
+/* ============ NAV ============ */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: var(--space-sm) var(--space-lg); display: flex; align-items: center; justify-content: space-between; transition: background var(--duration-medium) var(--ease-standard), border-color var(--duration-medium) var(--ease-standard); border-bottom: 1px solid transparent; }
+.nav--scrolled { background: rgba(13,15,18,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom-color: var(--dark-700); }
+.nav__logo svg { height: 28px; width: auto; }
+.nav__links { display: flex; gap: var(--space-lg); align-items: center; list-style: none; }
+.nav__link { font-size: var(--text-small); font-weight: 500; color: var(--gray-300); transition: color var(--duration-fast) var(--ease-standard); letter-spacing: 0.01em; }
+.nav__link:hover, .nav__link:focus-visible { color: var(--white); }
+.nav__mobile-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; color: var(--gray-300); }
+.nav__mobile-toggle span { display: block; width: 20px; height: 2px; background: currentColor; position: relative; }
+.nav__mobile-toggle span::before, .nav__mobile-toggle span::after { content: ''; position: absolute; width: 100%; height: 100%; background: currentColor; left: 0; transition: transform var(--duration-fast) var(--ease-out); }
+.nav__mobile-toggle span::before { top: -6px; }
+.nav__mobile-toggle span::after { top: 6px; }
+
+/* ============ LAYOUT ============ */
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-lg); }
+.section { padding: var(--space-3xl) 0; }
+.section__label { font-family: var(--font-mono); font-size: var(--text-small); font-weight: 400; color: var(--gray-400); letter-spacing: 0.05em; margin-bottom: var(--space-md); max-width: var(--content-narrow); margin-left: auto; margin-right: auto; }
+.section__label span { color: var(--gold-500); }
+.section__heading { font-size: var(--text-h1); font-weight: 600; color: var(--white); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: var(--space-lg); max-width: var(--content-narrow); margin-left: auto; margin-right: auto; }
+
+/* ============ SCROLL ANIMATIONS ============ */
+[data-animate] { opacity: 0; transform: translateY(24px); transition: opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out); }
+[data-animate].is-visible { opacity: 1; transform: translateY(0); }
+[data-animate-delay="1"] { transition-delay: 100ms; }
+[data-animate-delay="2"] { transition-delay: 200ms; }
+[data-animate-delay="3"] { transition-delay: 300ms; }
+
+/* ============ HERO ============ */
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; background: var(--dark-950); position: relative; overflow: hidden; padding: var(--space-3xl) 0; }
+.hero__bg { position: absolute; inset: 0; overflow: hidden; }
+.hero__glow { position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 600px; background: radial-gradient(ellipse, rgba(204,138,10,0.04) 0%, transparent 70%); pointer-events: none; }
+.hero__dots { position: absolute; inset: 0; background-image: radial-gradient(circle, var(--dark-700) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.4; mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 30%, transparent 80%); }
+.hero__content { position: relative; z-index: 1; }
+.hero__wordmark { margin-bottom: var(--space-xl); opacity: 0; animation: fadeIn var(--duration-slow) var(--ease-out) 200ms forwards; }
+.hero__wordmark svg { height: 52px; width: auto; }
+.hero__headline { font-size: var(--text-display); font-weight: 600; color: var(--white); line-height: 1.1; letter-spacing: -0.03em; max-width: 720px; margin-bottom: var(--space-md); opacity: 0; animation: fadeSlideUp var(--duration-slow) var(--ease-out) 350ms forwards; }
+.hero__headline .gold-dot { display: inline-block; width: 0.22em; height: 0.22em; background: var(--gold-500); border-radius: 50%; vertical-align: baseline; margin-left: 0.1em; box-shadow: 0 0 12px rgba(204,138,10,0.4); animation: dotPulse 3s ease-in-out infinite; }
+@keyframes dotPulse { 0%,100% { box-shadow: 0 0 12px rgba(204,138,10,0.3); opacity: 0.8; } 50% { box-shadow: 0 0 24px rgba(204,138,10,0.6); opacity: 1; } }
+.hero__subheadline { font-size: 1.125rem; line-height: 1.6; color: var(--gray-300); max-width: 600px; margin-bottom: var(--space-md); opacity: 0; animation: fadeSlideUp var(--duration-slow) var(--ease-out) 500ms forwards; }
+.hero__stats { font-family: var(--font-mono); font-size: var(--text-small); color: var(--gray-400); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: var(--space-xl); opacity: 0; animation: fadeSlideUp var(--duration-slow) var(--ease-out) 600ms forwards; }
+.hero__stats img { display: inline-block; height: 20px; vertical-align: middle; }
+.hero__actions { opacity: 0; animation: fadeSlideUp var(--duration-slow) var(--ease-out) 700ms forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ============ BUTTONS ============ */
+.btn-primary { display: inline-flex; align-items: center; gap: var(--space-xs); padding: 0.75rem 1.5rem; border: 1px solid var(--gold-500); color: var(--gold-500); font-size: var(--text-small); font-weight: 500; letter-spacing: 0.01em; transition: all var(--duration-fast) var(--ease-standard); background: transparent; }
+.btn-primary:hover, .btn-primary:focus-visible { background: var(--gold-500); color: var(--dark-950); }
+.btn-primary:focus-visible { outline: 2px solid var(--gold-400); outline-offset: 2px; }
+.btn-primary .arrow { transition: transform var(--duration-fast) var(--ease-out); }
+.btn-primary:hover .arrow { transform: translateX(3px); }
+
+/* ============ PROSE SECTIONS ============ */
+.prose-section { background: var(--dark-900); border-top: var(--border-subtle); }
+.prose-section__inner { max-width: var(--content-narrow); margin: 0 auto; }
+.prose-section__inner p { margin-bottom: var(--space-md); }
+.prose-section__inner p:last-child { margin-bottom: 0; }
+.prose-section__inner strong { color: var(--white); font-weight: 500; }
+
+/* ============ ARCHITECTURE SECTION ============ */
+.architecture { background: var(--dark-900); border-top: var(--border-subtle); }
+.architecture__layout { display: flex; flex-direction: column; gap: var(--space-2xl); }
+.architecture__text { max-width: var(--content-narrow); margin: 0 auto; }
+.architecture__text p { margin-bottom: var(--space-md); }
+.architecture__text p:last-child { margin-bottom: 0; }
+.architecture__text::after { content: ''; display: block; width: 60px; height: 1px; background: var(--dark-600); margin: var(--space-xl) auto 0; }
+
+/* Architecture Diagram — HTML/CSS rebuild */
+.arch-diagram { background: var(--dark-800); border: var(--border-subtle); border-radius: 8px; padding: var(--space-md); overflow: hidden; max-width: 840px; margin: 0 auto; width: 100%; }
+.arch-diagram__title { font-family: var(--font-mono); font-size: 16px; font-weight: 500; color: var(--gray-300); text-align: center; margin-bottom: 4px; }
+.arch-diagram__subtitle { font-family: var(--font-mono); font-size: 13px; color: var(--gray-500); text-align: center; margin-bottom: var(--space-md); }
+
+/* Cross-layer wrapper */
+.arch-cross { border: 1px dashed var(--scope-cross); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; background: rgba(188,140,255,0.03); }
+.arch-cross__label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--scope-cross); letter-spacing: 1.5px; text-transform: uppercase; text-align: center; margin-bottom: 6px; }
+.arch-cross__pill { display: flex; justify-content: center; margin-bottom: 4px; }
+.arch-cross__pill span { font-family: var(--font-mono); font-size: 13px; color: var(--scope-cross); padding: 3px 10px; background: rgba(188,140,255,0.08); border: 1px solid rgba(188,140,255,0.2); border-radius: 9px; }
+.arch-cross__desc { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); text-align: center; }
+
+/* Scope sections */
+.arch-scope { border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative; }
+.arch-scope--global { background: rgba(88,166,255,0.03); }
+.arch-scope--project { background: rgba(210,153,34,0.04); }
+.arch-scope--conversation { background: rgba(63,185,80,0.03); }
+.arch-scope::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 8px 8px 0 0; }
+.arch-scope--global::before { background: var(--scope-global); opacity: 0.25; }
+.arch-scope--project::before { background: var(--scope-project); opacity: 0.25; }
+.arch-scope--conversation::before { background: var(--scope-conversation); opacity: 0.25; }
+.arch-scope__header { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-align: center; margin-bottom: 2px; margin-top: 4px; }
+.arch-scope--global .arch-scope__header { color: var(--scope-global); }
+.arch-scope--project .arch-scope__header { color: var(--scope-project); }
+.arch-scope--conversation .arch-scope__header { color: var(--scope-conversation); }
+.arch-scope__subtitle { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); text-align: center; margin-bottom: 10px; }
+
+/* Layer blocks */
+.arch-layer { display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 6px; cursor: pointer; transition: all var(--duration-fast) var(--ease-standard); margin-bottom: 6px; border-left: 3px solid transparent; }
+.arch-layer::before { content: ''; width: 22px; flex-shrink: 0; }
+.arch-layer:last-child { margin-bottom: 0; }
+.arch-scope--global .arch-layer { background: rgba(15,29,53,0.8); border-left-color: rgba(88,166,255,0.3); }
+.arch-scope--global .arch-layer:hover { border-left-color: var(--scope-global); background: rgba(15,29,53,1); }
+.arch-scope--project .arch-layer { background: rgba(37,26,13,0.8); border-left-color: rgba(210,153,34,0.3); }
+.arch-scope--project .arch-layer:hover { border-left-color: var(--scope-project); background: rgba(37,26,13,1); }
+.arch-scope--conversation .arch-layer { background: rgba(15,43,27,0.8); border-left-color: rgba(63,185,80,0.3); }
+.arch-scope--conversation .arch-layer:hover { border-left-color: var(--scope-conversation); background: rgba(15,43,27,1); }
+.arch-layer--active.arch-layer { border-left-color: var(--gold-500); }
+.arch-scope--global .arch-layer--active { background: rgba(88,166,255,0.06); }
+.arch-scope--project .arch-layer--active { background: rgba(210,153,34,0.06); }
+.arch-scope--conversation .arch-layer--active { background: rgba(63,185,80,0.06); }
+.arch-layer__info { flex: 1; min-width: 0; }
+.arch-layer__name { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--gray-300); transition: color var(--duration-fast); }
+.arch-layer:hover .arch-layer__name, .arch-layer--active .arch-layer__name { color: var(--white); }
+.arch-layer__desc { font-size: 13px; color: var(--gray-500); margin-top: 2px; line-height: 1.3; }
+.arch-layer__chevron { flex-shrink: 0; margin-left: 8px; color: var(--dark-600); transition: color var(--duration-fast); }
+.arch-layer:hover .arch-layer__chevron { color: var(--gold-500); }
+.arch-layer--active .arch-layer__chevron { color: var(--gold-500); }
+.arch-layer:focus-visible { outline: 2px solid var(--gold-400); outline-offset: 2px; }
+.arch-scope__supporting { font-family: var(--font-mono); font-size: 12px; color: var(--gray-500); text-align: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--dark-700); line-height: 1.5; }
+
+/* ============ SKILLS (shared) ============ */
+.skills { background: var(--dark-950); border-top: var(--border-subtle); position: relative; }
+.skills__intro { max-width: var(--content-narrow); margin: 0 auto; margin-bottom: var(--space-md); }
+
+/* ============ CORE SKILLS (3-column cards) ============ */
+.core-skills__cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); max-width: 960px; margin: 0 auto; }
+.core-skills__card { background: var(--dark-800); border: 1px solid var(--dark-600); border-radius: 8px; padding: var(--space-lg); border-top: 2px solid var(--gold-500); }
+.core-skills__card-header { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--gold-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-md); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--dark-600); }
+.core-skills__card-items { display: flex; flex-direction: column; gap: 8px; }
+.core-skills__card-items .skill-node { width: 100%; }
+
+/* ============ SUPPORTING SKILLS (two individual cards) ============ */
+.skills__divider-heading { font-size: var(--text-h2); font-weight: 600; color: var(--white); line-height: 1.2; letter-spacing: -0.01em; margin-top: var(--space-2xl); margin-bottom: var(--space-sm); max-width: var(--content-narrow); margin-left: auto; margin-right: auto; }
+.skills__divider-intro { max-width: var(--content-narrow); margin: 0 auto; margin-bottom: var(--space-md); color: var(--gray-300); }
+.supporting-skills__cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); max-width: 760px; margin: 0 auto; }
+.supporting-skills__card { background: var(--dark-800); border: 1px solid var(--dark-600); border-top: 2px solid var(--gold-500); border-radius: 8px; padding: var(--space-lg); }
+.supporting-skills__card-header { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--gold-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-md); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--dark-600); }
+.supporting-skills__card-items { display: flex; flex-direction: column; gap: 8px; }
+.supporting-skills__card-items .skill-node { width: 100%; }
+.skill-node { padding: 0.75rem 1rem; background: var(--dark-800); border: 1px solid var(--dark-700); cursor: pointer; transition: all var(--duration-fast) var(--ease-standard); display: flex; align-items: center; gap: var(--space-xs); }
+.skill-node__name { font-family: var(--font-mono); font-size: 12.5px; font-weight: 400; color: var(--gray-300); line-height: 1.4; transition: color var(--duration-fast) var(--ease-standard); white-space: nowrap; }
+.skill-node__chevron { margin-left: auto; color: var(--dark-600); flex-shrink: 0; transition: color var(--duration-fast) var(--ease-standard); }
+.skill-node:hover, .skill-node:focus-visible { border-color: var(--gold-500); }
+.skill-node:hover .skill-node__name, .skill-node:focus-visible .skill-node__name { color: var(--white); }
+.skill-node:hover .skill-node__chevron, .skill-node:focus-visible .skill-node__chevron { color: var(--gold-500); }
+.skill-node--active { border-color: var(--gold-500); background: rgba(204,138,10,0.06); }
+.skill-node--active .skill-node__name { color: var(--gold-500); }
+.skill-node:focus-visible { outline: 2px solid var(--gold-400); outline-offset: 2px; }
+
+/* ============ IN PRACTICE ============ */
+.in-practice { background: var(--dark-900); border-top: var(--border-subtle); }
+.in-practice__intro { max-width: var(--content-narrow); margin: 0 auto; margin-bottom: var(--space-xl); }
+.in-practice__examples { display: grid; grid-template-columns: 1fr 1px 1fr; gap: var(--space-xl); max-width: 1060px; margin: 0 auto; }
+.in-practice__divider { background: var(--dark-700); }
+.example-card { background: var(--dark-950); border: var(--border-subtle); border-radius: 8px; padding: var(--space-lg); }
+.example-card__title { font-family: var(--font-mono); font-size: var(--text-small); font-weight: 500; color: var(--white); margin-bottom: var(--space-md); }
+.example-step { margin-bottom: var(--space-md); }
+.example-step:last-child { margin-bottom: 0; }
+.example-step__label { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+.example-step__label--user { color: var(--gold-500); }
+.example-step__label--system { color: var(--gray-400); }
+.example-step__label--result { color: var(--scope-global); }
+.example-step__text { font-size: var(--text-small); color: var(--gray-300); line-height: 1.6; }
+.example-step__text--user { font-family: var(--font-mono); color: var(--gold-400); font-size: 13px; }
+
+/* ============ SLIDE-IN PANEL ============ */
+.slide-panel { position: fixed; top: 0; right: 0; width: 480px; max-width: 90vw; height: 100vh; background: var(--dark-800); border-left: 1px solid var(--dark-700); z-index: 200; transform: translateX(100%); transition: transform var(--duration-medium) var(--ease-out); overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,0.4); }
+.slide-panel--open { transform: translateX(0); }
+.slide-panel__inner { padding: var(--space-xl) var(--space-lg); }
+.slide-panel__close { position: absolute; top: var(--space-sm); right: var(--space-sm); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--gray-400); font-size: 1.25rem; transition: color var(--duration-fast); }
+.slide-panel__close:hover { color: var(--white); }
+.slide-panel__badge { display: inline-block; font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.25rem 0.5rem; margin-bottom: var(--space-md); }
+.slide-panel__badge--global { color: var(--scope-global); background: rgba(88,166,255,0.1); }
+.slide-panel__badge--project { color: var(--scope-project); background: rgba(210,153,34,0.1); }
+.slide-panel__badge--conversation { color: var(--scope-conversation); background: rgba(63,185,80,0.1); }
+.slide-panel__badge--cross { color: var(--scope-cross); background: rgba(188,140,255,0.1); }
+.slide-panel__badge--skill { color: var(--gray-400); background: var(--dark-700); }
+.slide-panel__title { font-family: var(--font-mono); font-size: var(--text-h3); font-weight: 500; color: var(--white); line-height: 1.3; margin-bottom: var(--space-md); }
+.slide-panel__desc { color: var(--gray-300); line-height: 1.6; margin-bottom: var(--space-lg); }
+.slide-panel__desc p { margin-bottom: var(--space-sm); }
+.slide-panel__desc p:last-child { margin-bottom: 0; }
+.slide-panel__section-label { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--gray-400); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: var(--space-sm); }
+.slide-panel__pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--space-lg); }
+.keyword-pill { font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--gray-300); padding: 0.3rem 0.6rem; background: var(--dark-900); border: 1px solid var(--dark-700); }
+.compose-link { font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--gold-500); padding: 0.3rem 0.6rem; background: rgba(204,138,10,0.06); border: 1px solid rgba(204,138,10,0.2); cursor: pointer; transition: all var(--duration-fast) var(--ease-standard); }
+.compose-link:hover { background: rgba(204,138,10,0.12); border-color: var(--gold-500); }
+.slide-panel__cta { margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: var(--border-subtle); }
+.panel-overlay { position: fixed; inset: 0; background: rgba(10,12,15,0.6); z-index: 199; opacity: 0; pointer-events: none; transition: opacity var(--duration-medium) var(--ease-standard); }
+.panel-overlay--visible { opacity: 1; pointer-events: auto; }
+.bench-note { padding: 1rem; background: var(--dark-900); border-left: 2px solid var(--gold-500); margin-top: var(--space-xs); }
+.bench-note p { font-size: 13px; color: var(--gray-300); line-height: 1.6; margin-bottom: var(--space-xs); }
+.bench-note p:last-child { margin-bottom: 0; }
+
+/* ============ HOW IT WORKS ============ */
+.how-it-works { background: var(--dark-900); border-top: var(--border-subtle); }
+.how-it-works__grid { display: grid; grid-template-columns: 1fr 1px 1fr; gap: var(--space-xl); }
+.how-it-works__divider { background: var(--dark-700); }
+.workflow__title { font-size: var(--text-h2); font-weight: 600; color: var(--white); margin-bottom: var(--space-xs); letter-spacing: -0.01em; }
+.workflow__subtitle { font-size: var(--text-small); color: var(--gray-400); margin-bottom: var(--space-lg); }
+.workflow__steps { display: flex; flex-direction: column; gap: var(--space-md); }
+.step { display: grid; grid-template-columns: 36px 1fr; gap: var(--space-sm); }
+.step__number { font-family: var(--font-mono); font-size: var(--text-h2); font-weight: 500; color: var(--gold-500); line-height: 1; }
+.step__label { font-size: var(--text-h3); font-weight: 500; color: var(--white); margin-bottom: 4px; }
+.step__desc { font-size: var(--text-small); color: var(--gray-400); line-height: 1.5; }
+
+/* ============ NUMBERS ============ */
+.numbers { background: var(--dark-950); border-top: var(--border-subtle); border-bottom: var(--border-subtle); padding: var(--space-2xl) 0; }
+.numbers__grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-lg); }
+.metric { text-align: center; }
+.metric__value { font-size: var(--text-display); font-weight: 600; color: var(--white); line-height: 1; letter-spacing: -0.03em; margin-bottom: var(--space-xs); font-variant-numeric: tabular-nums; }
+.metric__value--gold { color: var(--gold-500); }
+.metric__label { font-size: var(--text-small); color: var(--gray-400); line-height: 1.4; }
+
+/* ============ FOOTER ============ */
+.footer { background: var(--dark-950); border-top: var(--border-subtle); padding: var(--space-xl) 0; }
+.footer__grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-lg); align-items: center; }
+.footer__brand { display: flex; flex-direction: column; gap: var(--space-xs); }
+.footer__brand svg { height: 22px; width: auto; }
+.footer__brand-tagline { font-size: var(--text-small); color: var(--gray-400); }
+.footer__links { display: flex; gap: var(--space-lg); list-style: none; }
+.footer__link { font-size: var(--text-small); color: var(--gray-300); transition: color var(--duration-fast); }
+.footer__link:hover { color: var(--white); }
+.footer__attribution { text-align: right; font-size: var(--text-small); color: var(--gray-500); }
+.footer__attribution a { transition: color var(--duration-fast); }
+.footer__attribution a:hover { color: var(--gray-300); }
+
+/* ============ HIDDEN PANEL CONTENT (SEO) ============ */
+.seo-panel-content { display: none; }
+
+/* ============ RESPONSIVE — Tablet ============ */
+@media (max-width: 1024px) {
+  :root { --text-display: 2.5rem; --text-h1: 2rem; --text-h2: 1.5rem; }
+  .core-skills__cards { grid-template-columns: repeat(3, 1fr); }
+  .supporting-skills__cards { grid-template-columns: 1fr 1fr; }
+  .how-it-works__grid { grid-template-columns: 1fr; gap: var(--space-2xl); }
+  .how-it-works__divider { display: none; }
+  .in-practice__examples { grid-template-columns: 1fr; gap: var(--space-lg); }
+  .in-practice__divider { display: none; }
+  .numbers__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+}
+
+/* ============ RESPONSIVE — Mobile ============ */
+@media (max-width: 640px) {
+  :root { --text-display: 2rem; --text-h1: 1.75rem; --text-h2: 1.375rem; --space-lg: 1.5rem; --space-xl: 2.5rem; --space-2xl: 4rem; --space-3xl: 5rem; }
+  .nav { padding: var(--space-sm); }
+  .nav__links { display: none; }
+  .nav__links--open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(13,15,18,0.98); backdrop-filter: blur(12px); padding: var(--space-md); border-bottom: var(--border-subtle); gap: var(--space-sm); }
+  .nav__mobile-toggle { display: flex; }
+  .container { padding: 0 var(--space-sm); }
+  .core-skills__cards { grid-template-columns: 1fr; }
+  .supporting-skills__cards { grid-template-columns: 1fr; }
+  .numbers__grid { grid-template-columns: repeat(2, 1fr); }
+  .footer__grid { grid-template-columns: 1fr; text-align: center; gap: var(--space-md); }
+  .footer__links { justify-content: center; }
+  .footer__attribution { text-align: center; }
+  .slide-panel { width: 100%; }
+  .hero__stats { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  [data-animate] { opacity: 1; transform: none; }
+  .hero__headline .gold-dot { animation: none; opacity: 1; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav class="nav" role="navigation" aria-label="Primary navigation">
+  <a href="/" class="nav__logo" aria-label="root.node home">
+    <svg viewBox="100 90 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="white"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="white"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="white"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="white"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="white"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="white"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="white"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="white"/></svg>
+  </a>
+  <ul class="nav__links" id="navLinks">
+    <li><a href="#architecture" class="nav__link">Architecture</a></li>
+    <li><a href="#skills" class="nav__link">Skills</a></li>
+    <li><a href="#how-it-works" class="nav__link">How It Works</a></li>
+    <li><a href="https://github.com/drayline/rootnode-skills" class="nav__link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+  </ul>
+  <button class="nav__mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span></span></button>
+</nav>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero__bg"><div class="hero__glow"></div><div class="hero__dots"></div></div>
+    <div class="container hero__content">
+      <div class="hero__wordmark">
+        <svg viewBox="100 90 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="root.node"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="white"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="white"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="white"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="white"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="white"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="white"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="white"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="white"/></svg>
+      </div>
+      <h1 id="hero-heading" class="hero__headline">Claude Projects are architecture.<br>Build them like <span style="white-space:nowrap">it<span class="gold-dot" aria-hidden="true"></span></span></h1>
+      <p class="hero__subheadline">A tested system of modular Skills that score, diagnose, and build Claude Project architecture from reusable components.</p>
+      <p class="hero__stats">19 Skills &middot; 92 Blocks &middot; Open Source &middot; <a href="https://github.com/drayline/rootnode-skills" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/stars/drayline/rootnode-skills?style=flat&color=%23CC8A0A" alt="GitHub stars" loading="lazy"></a></p>
+      <div class="hero__actions">
+        <a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">Get the Skills on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 — THE PROBLEM -->
+  <section class="section prose-section" aria-labelledby="problem-heading">
+    <div class="container"><div class="prose-section__inner" data-animate>
+      <p class="section__label"><span>01</span> — The problem</p>
+      <h2 id="problem-heading" class="section__heading">How well is your Claude Project actually performing?</h2>
+      <p>A Claude Project that produces decent output can still be structurally unsound. There's no scorecard. No structural diagnostics. No built-in way to know whether your Project is working at 60% of its potential or 95%. root.node gives you the diagnostic tools to find out and the compilation pipeline to fix what you find.</p>
+    </div></div>
+  </section>
+
+  <!-- 02 — THE ARCHITECTURE -->
+  <section class="section architecture" id="architecture" aria-labelledby="arch-heading">
+    <div class="container">
+      <p class="section__label" data-animate><span>02</span> — The architecture</p>
+      <h2 id="arch-heading" class="section__heading" data-animate>Nine layers. One system.</h2>
+      <div class="architecture__layout">
+        <div class="architecture__text" data-animate data-animate-delay="1">
+          <p>Every Claude Project sits within a nine-layer architecture. Five global layers form the foundation that spans all your Projects. Three project layers shape behavior within a single Project. The conversation layer is where you interact with the system.</p>
+          <p>How content is distributed across these layers determines everything. A rule in the wrong layer gets ignored. A preference that should be global gets restated in every Project. Context budget gets consumed by content that belongs somewhere else. Cross-layer conflicts cause unpredictable output that no amount of prompt rewording will fix.</p>
+          <p>root.node treats the entire architecture as a unified system: scoring each layer, detecting cross-layer conflicts, diagnosing Claude's behavioral tendencies, and building Projects that are structurally sound from the start. The system is calibrated to how Claude actually processes context: the behavioral tendencies documented through extensive testing, the loading behavior of each layer, and the architectural patterns that produce reliable output.</p>
+        </div>
+
+        <!-- Architecture Diagram (HTML/CSS rebuild) -->
+        <div class="arch-diagram" data-animate data-animate-delay="2">
+          <p class="arch-diagram__title">The Nine Layers of a Claude Project</p>
+          <p class="arch-diagram__subtitle">Click any layer for details</p>
+
+          <!-- Cross-layer -->
+          <div class="arch-cross">
+            <p class="arch-cross__label">Cross-Layer</p>
+            <div class="arch-cross__pill"><span>full-stack-audit</span></div>
+            <p class="arch-cross__desc">Spans all 9 layers in one pass</p>
+          </div>
+
+          <!-- Global Scope -->
+          <div class="arch-scope arch-scope--global">
+            <p class="arch-scope__header">GLOBAL SCOPE</p>
+            <p class="arch-scope__subtitle">Foundation across all Projects</p>
+            <button class="arch-layer" data-layer="user-preferences" aria-label="View User Preferences layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">User Preferences</span><p class="arch-layer__desc">Communication style, expertise level, behavioral defaults.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="arch-layer" data-layer="styles" aria-label="View Styles layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">Styles</span><p class="arch-layer__desc">Tone, format, and delivery patterns.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="arch-layer" data-layer="global-memory" aria-label="View Global Memory layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">Global Memory</span><p class="arch-layer__desc">Cross-project context and learned preferences.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="arch-layer" data-layer="skills-layer" aria-label="View Skills layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">Skills</span><p class="arch-layer__desc">Procedural knowledge in SKILL.md files. Activated by task relevance.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="arch-layer" data-layer="mcp-connectors" aria-label="View MCP Connectors layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">MCP Connectors</span><p class="arch-layer__desc">External service integrations. Tools loaded on demand.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+
+          <!-- Project Scope -->
+          <div class="arch-scope arch-scope--project">
+            <p class="arch-scope__header">PROJECT SCOPE</p>
+            <p class="arch-scope__subtitle">Shapes every conversation in a Project</p>
+            <button class="arch-layer" data-layer="project-memory" aria-label="View Project Memory layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">Project Memory</span><p class="arch-layer__desc">Phase awareness, active constraints, key decisions.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="arch-layer" data-layer="custom-instructions" aria-label="View Custom Instructions layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">Custom Instructions</span><p class="arch-layer__desc">Always-loaded behavioral architecture. Identity, rules, routing, output standards.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="arch-layer" data-layer="knowledge-files" aria-label="View Knowledge Files layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">Knowledge Files</span><p class="arch-layer__desc">Searchable reference depth. Documentation, data, frameworks.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+
+          <!-- Conversation Scope -->
+          <div class="arch-scope arch-scope--conversation">
+            <p class="arch-scope__header">CONVERSATION SCOPE</p>
+            <p class="arch-scope__subtitle">The current exchange</p>
+            <button class="arch-layer" data-layer="conversation-context" aria-label="View Conversation Context layer details">
+              <div class="arch-layer__info"><span class="arch-layer__name">Conversation Context</span><p class="arch-layer__desc">Where you interact with the Project. Skills activate here through natural language.</p></div>
+              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+
+          <p class="arch-scope__supporting">Supporting Skills (activate in background): block-selection &middot; identity-blocks &middot; reasoning-blocks &middot; output-blocks &middot; 5 domain packs</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 — THE SKILLS -->
+  <section class="section skills" id="skills" aria-labelledby="skills-heading">
+    <div class="container" style="position:relative;z-index:1">
+      <p class="section__label" data-animate><span>03</span> — The skills</p>
+      <h2 id="skills-heading" class="section__heading" data-animate>Diagnose. Build. Optimize.</h2>
+      <p class="skills__intro" data-animate data-animate-delay="1">Every Skill is extracted from the full root.node methodology, published on GitHub, and works independently. Install one or install all. They compose additively without competing.</p>
+      <div class="core-skills__cards" data-animate data-animate-delay="2" id="coreSkillsGrid"></div>
+      <h3 class="skills__divider-heading" data-animate>The building blocks.</h3>
+      <p class="skills__divider-intro" data-animate>Block libraries provide the tested components. Domain packs add specialized methodology. Both activate automatically during compilation. You can also call them directly.</p>
+      <div class="supporting-skills__cards" data-animate id="supportingSkillsGrid"></div>
+      <div style="margin-top:var(--space-lg);text-align:center" data-animate>
+        <a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">Browse the Skills on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 — IN PRACTICE -->
+  <section class="section in-practice" id="in-practice" aria-labelledby="practice-heading">
+    <div class="container">
+      <p class="section__label" data-animate><span>04</span> — In practice</p>
+      <h2 id="practice-heading" class="section__heading" data-animate>What it looks like to use root.node.</h2>
+      <p class="in-practice__intro" data-animate data-animate-delay="1">Install a Skill. Talk to Claude about your Project. The right tools activate automatically.</p>
+      <div class="in-practice__examples" data-animate data-animate-delay="2">
+        <div class="example-card">
+          <h3 class="example-card__title">Audit an existing Project</h3>
+          <div class="example-step">
+            <p class="example-step__label example-step__label--user">You say</p>
+            <p class="example-step__text example-step__text--user">"Audit my project"</p>
+          </div>
+          <div class="example-step">
+            <p class="example-step__label example-step__label--system">root.node does</p>
+            <p class="example-step__text">Ingests your Custom Instructions, knowledge files, and Memory. Scores six dimensions with anchored rubrics. Detects structural anti-patterns. Checks for behavioral miscalibrations. Cross-references global layer configuration.</p>
+          </div>
+          <div class="example-step">
+            <p class="example-step__label example-step__label--result">You get</p>
+            <p class="example-step__text">A scored diagnostic with the specific text causing each issue, the pattern it matches, and tested fixes ranked by impact. Act on the findings in the same conversation.</p>
+          </div>
+        </div>
+        <div class="in-practice__divider"></div>
+        <div class="example-card">
+          <h3 class="example-card__title">Build a new Project from scratch</h3>
+          <div class="example-step">
+            <p class="example-step__label example-step__label--user">You say</p>
+            <p class="example-step__text example-step__text--user">"Scaffold a Claude Project for competitive analysis research"</p>
+          </div>
+          <div class="example-step">
+            <p class="example-step__label example-step__label--system">root.node does</p>
+            <p class="example-step__text">Parses the task requirements. Selects the right identity approach, reasoning variant, and output format from the block library. Reads your global configuration to avoid redundancy. Assembles a full Project scaffold using the 5-layer prompt architecture.</p>
+          </div>
+          <div class="example-step">
+            <p class="example-step__label example-step__label--result">You get</p>
+            <p class="example-step__text">Complete Custom Instructions, a knowledge file architecture plan, Memory design, and a Global Layer Advisory. Validated against the six-dimension scorecard before you deploy it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 — THE WORKFLOW -->
+  <section class="section how-it-works" id="how-it-works" aria-labelledby="hiw-heading">
+    <div class="container">
+      <p class="section__label" data-animate><span>05</span> — The workflow</p>
+      <h2 id="hiw-heading" class="section__heading" data-animate>Compile, don't compose.</h2>
+      <p data-animate data-animate-delay="1" style="max-width:var(--content-narrow);margin:0 auto var(--space-2xl);color:var(--gray-300)">Traditional Project design is composition: write instructions, test them, tweak by feel, hope they hold. root.node replaces that with compilation: a structured process that assembles complete Claude Project architectures from tested components.</p>
+      <div class="how-it-works__grid" data-animate data-animate-delay="2">
+        <div>
+          <h3 class="workflow__title">The Compiler</h3>
+          <p class="workflow__subtitle">Build Projects from tested components</p>
+          <div class="workflow__steps">
+            <div class="step"><span class="step__number">1</span><div><p class="step__label">Parse</p><p class="step__desc">Analyze the task. What does the Project need to accomplish? What domain expertise, reasoning depth, output format, and behavioral calibration does it require? In Project Mode, the Compiler also reads your global configuration (User Preferences, installed Skills, and MCP Connectors) to inform the scaffold.</p></div></div>
+            <div class="step"><span class="step__number">2</span><div><p class="step__label">Select</p><p class="step__desc">Choose the right blocks. Decision trees map task characteristics to the best identity approach, reasoning variant, and output format from the tested library. Domain packs activate automatically for specialized tasks.</p></div></div>
+            <div class="step"><span class="step__number">3</span><div><p class="step__label">Construct</p><p class="step__desc">Assemble the Project using the 5-layer prompt architecture (Identity, Objective, Context, Reasoning, Output + Quality Control). Blocks slot into their layer. Knowledge file architecture, Memory design, and a global layer advisory are included in the scaffold.</p></div></div>
+            <div class="step"><span class="step__number">4</span><div><p class="step__label">Validate</p><p class="step__desc">Score the compiled Project against 6 quality dimensions. Check global layer alignment. Catch architectural flaws before deployment, not after.</p></div></div>
+          </div>
+        </div>
+        <div class="how-it-works__divider"></div>
+        <div>
+          <h3 class="workflow__title">The Optimizer</h3>
+          <p class="workflow__subtitle">Diagnose and fix existing Projects</p>
+          <div class="workflow__steps">
+            <div class="step"><span class="step__number">1</span><div><p class="step__label">Parse</p><p class="step__desc">Ingest the existing Project architecture: Custom Instructions, knowledge files, Memory. For global and full-stack audits, also parse User Preferences, Styles, installed Skills, and configured MCP Connectors.</p></div></div>
+            <div class="step"><span class="step__number">2</span><div><p class="step__label">Diagnose</p><p class="step__desc">Score against the 6-dimension Project Scorecard and, for global audits, the 6-dimension Global Layer Scorecard. Detect structural anti-patterns, behavioral miscalibrations, and cross-layer failure modes, all with evidence from the Project materials.</p></div></div>
+            <div class="step"><span class="step__number">3</span><div><p class="step__label">Prescribe</p><p class="step__desc">Produce targeted fixes ranked by impact. Every prescription references the specific text causing the issue and the tested countermeasure. For full-stack audits, produce evolutionary recommendations: promotions, demotions, codifications, and Skill extractions.</p></div></div>
+            <div class="step"><span class="step__number">4</span><div><p class="step__label">Reconstruct</p><p class="step__desc">Optionally rebuild the Project architecture from the ground up using the Compiler methodology, informed by everything the diagnosis revealed.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 — NUMBERS -->
+  <section class="numbers" aria-label="Key metrics">
+    <div class="container"><div class="numbers__grid" data-animate>
+      <div class="metric"><p class="metric__value metric__value--gold" data-count="92">0</p><p class="metric__label">prompt blocks</p></div>
+      <div class="metric"><p class="metric__value" data-count="19">0</p><p class="metric__label">Claude Skills</p></div>
+      <div class="metric"><p class="metric__value" data-count="5">0</p><p class="metric__label">domain packs</p></div>
+      <div class="metric"><p class="metric__value" data-count="6">0</p><p class="metric__label">scorecard dimensions</p></div>
+      <div class="metric"><p class="metric__value" data-count="8">0</p><p class="metric__label">behavioral countermeasures</p></div>
+    </div></div>
+  </section>
+
+  <!-- 06 — THE AUDIENCE -->
+  <section class="section prose-section" aria-labelledby="who-heading">
+    <div class="container"><div class="prose-section__inner" data-animate>
+      <p class="section__label"><span>06</span> — The audience</p>
+      <h2 id="who-heading" class="section__heading">For practitioners who build with Claude.</h2>
+      <p>root.node is built for people who use Claude Projects for real work. Not casual prompt experimentation. Structured, repeated workflows where output quality directly affects outcomes.</p>
+      <p>You'll get the most from these Skills if you're already building Projects and want to understand what's working, what's not, and why. Whether that means auditing a Project you've been running for months, scaffolding a new one from tested components, or diagnosing why quality degrades over long conversations.</p>
+      <div style="margin-top:var(--space-xl)">
+        <a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">Get the Skills on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div></div>
+  </section>
+</main>
+
+<!-- SEO: All layer panel content rendered in DOM for crawlability -->
+<div class="seo-panel-content" aria-hidden="true">
+  <div id="seo-layer-user-preferences"><h3>User Preferences</h3><p>Communication style, expertise level, behavioral defaults. Everything here persists across all Projects and all conversations. The foundation layer: what Claude knows about you before any Project loads.</p><p>Preferences are too vague to guide Claude's behavior. Redundant rules get restated in every Project. Stable patterns stay trapped in Project Memory instead of being promoted globally.</p><p>Evaluates Preference precision, detects redundancies with Project-scoped instructions, and identifies patterns ready for promotion from Project Memory.</p></div>
+  <div id="seo-layer-styles"><h3>Styles</h3><p>Tone, format, and delivery patterns. Applied by selection and can be switched per conversation. Controls how Claude communicates, separate from what it knows or how it reasons.</p><p>Style settings conflict with formatting rules hardcoded in Custom Instructions. Tone preferences get scattered across Projects instead of centralized.</p><p>Detects tension between Style settings and Custom Instructions formatting. Identifies when delivery preferences belong in a Style rather than being hardcoded per Project.</p></div>
+  <div id="seo-layer-global-memory"><h3>Global Memory</h3><p>Cross-project context and learned preferences. Auto-synthesized from conversations. Orientation facts that help Claude understand who you are and what matters to you, loaded into every conversation.</p><p>Memory accumulates stale facts, redundant entries, and reference-depth content that belongs in knowledge files. Bloated Memory consumes context budget across every conversation.</p><p>Audits for redundancy and staleness. Rebalances content between Memory, Preferences, and knowledge files. Tracks Memory's contribution to context overhead.</p></div>
+  <div id="seo-layer-skills"><h3>Skills</h3><p>Procedural knowledge packaged in SKILL.md files. Activated automatically by task relevance. Skills use progressive disclosure: a lightweight description loads at startup, the full methodology loads on demand.</p><p>Installed Skills collide with Project knowledge files covering the same territory. The Skill portfolio has gaps that force manual workarounds. Overhead from unused Skills consumes context budget.</p><p>Evaluates Skill portfolio fitness, detects collisions with knowledge files, and converts design specs into deployment-ready Skill packages.</p></div>
+  <div id="seo-layer-mcp"><h3>MCP Connectors</h3><p>External service integrations like Gmail, Slack, Google Drive, and Notion. Tools loaded on demand through deferred loading: configured once, available everywhere.</p><p>Projects assume connector capabilities that aren't configured. Connector overhead goes untracked. Alignment between available connectors and Project needs drifts as Projects evolve.</p><p>Checks connector alignment with Project needs, detects assumed capabilities without configured connectors, and accounts for connector overhead.</p></div>
+  <div id="seo-layer-project-memory"><h3>Project Memory</h3><p>Phase awareness, active constraints, key decisions. Auto-synthesized per Project. The orientation layer that helps Claude pick up where you left off: what you're working on, what was decided, what's next.</p><p>Memory fills with outdated decisions, redundant orientation facts, and content that belongs in Preferences or knowledge files. Claude's per-conversation orientation degrades as Memory becomes noisy.</p><p>Audits for redundancy and staleness, identifies content ready for promotion or demotion, and produces specific edit prescriptions with human-in-the-loop confirmation.</p></div>
+  <div id="seo-layer-ci"><h3>Custom Instructions</h3><p>The behavioral architecture of your Project. Identity, rules, routing, output standards. Everything here loads into every conversation, every time. This is the highest-leverage layer: the right instructions here shape every response Claude produces.</p><p>Instructions that work individually conflict with each other silently. Rules meant for knowledge files bloat the always-loaded context. Behavioral calibration is guesswork. Seven structural anti-patterns hide in plain sight.</p><p>Builds Custom Instructions using the 5-layer prompt architecture. Scores instruction clarity across six dimensions. Detects anti-patterns and provides tested countermeasures for Claude's eight behavioral tendencies.</p></div>
+  <div id="seo-layer-kf"><h3>Knowledge Files</h3><p>Searchable reference depth. Documentation, data, and frameworks loaded on demand when a query matches their content. In retrieval mode, Claude searches rather than loading everything. How files are structured directly affects what gets found.</p><p>Files structured for human reading fail Claude's retrieval patterns. Orphaned files go unreferenced. Context budget gets consumed by content that belongs in other layers.</p><p>Runs full budget analysis with per-file evaluation, content routing, growth trajectory, and retrieval quality audit. Detects orphaned files and content misplacement.</p></div>
+  <div id="seo-layer-conversation"><h3>Conversation Context</h3><p>Messages, uploads, tool results. Where architecture meets execution. This is the layer where you interact with the Project and where Skills activate through natural language.</p><p>If the layers above are misconfigured, conversation quality suffers in ways that look like Claude's fault but are actually structural.</p><p>Skills activate through this layer automatically. Keywords and task descriptions trigger the right diagnostic and compilation tools without requiring explicit commands.</p></div>
+</div>
+
+<!-- SEO: All skill panel content rendered in DOM for crawlability -->
+<div class="seo-panel-content" aria-hidden="true">
+  <div id="seo-skill-project-audit"><h3>rootnode-project-audit</h3><p>Scores Claude Projects on six dimensions using anchored 1-5 rubrics. Now includes global layer awareness. Quick Audit gains Global Layer Notes. Full Audit gains Cross-Layer Alignment section.</p></div>
+  <div id="seo-skill-global-audit"><h3>rootnode-global-audit</h3><p>Audits all five global layers (Preferences, Styles, Memory, Skills, Connectors) using a six-dimension scorecard. Detects eight cross-layer failure modes and produces evolutionary recommendations.</p></div>
+  <div id="seo-skill-full-stack-audit"><h3>rootnode-full-stack-audit</h3><p>Combines Project audit + Global audit + Cross-Layer Alignment into a single comprehensive evaluation. Produces a unified action plan across all nine layers.</p></div>
+  <div id="seo-skill-anti-pattern"><h3>rootnode-anti-pattern-detection</h3><p>Detects seven structural patterns that cause ignored instructions and degraded output. Every finding quotes the specific text causing the problem.</p></div>
+  <div id="seo-skill-prompt-validation"><h3>rootnode-prompt-validation</h3><p>Six-dimension Prompt Scorecard for evaluating existing prompts. Includes a symptom-to-fix diagnostic map that connects observed problems to specific structural causes.</p></div>
+  <div id="seo-skill-prompt-compilation"><h3>rootnode-prompt-compilation</h3><p>Four-stage methodology for building Claude prompts and Project scaffolds: Parse, Select, Construct, Validate. Project Mode now has global layer awareness.</p></div>
+  <div id="seo-skill-skill-builder"><h3>rootnode-skill-builder</h3><p>Converts design specifications into deployment-ready Skill packages (SKILL.md + references/). Carries the full Skills spec, conversion rules, progressive disclosure patterns, and quality gate.</p></div>
+  <div id="seo-skill-behavioral-tuning"><h3>rootnode-behavioral-tuning</h3><p>Diagnoses eight Claude behavioral tendencies (verbosity, hedging, list overuse, agreeableness bias, and others) with countermeasure templates ready to paste into system prompts.</p></div>
+  <div id="seo-skill-memory-optimization"><h3>rootnode-memory-optimization</h3><p>Rebalances context across Memory, Custom Instructions, knowledge files, and User Preferences. Includes the Codification pathway for promoting stable Memory patterns to Preferences.</p></div>
+  <div id="seo-skill-context-budget"><h3>rootnode-context-budget</h3><p>Full context budget analysis: two-pool architecture, per-file evaluation across six dimensions, content routing by category, growth trajectory, retrieval quality audit, and phased optimization with compression safeguards.</p></div>
+  <div id="seo-skill-block-selection"><h3>rootnode-block-selection</h3><p>Decision-tree logic across 8 identity, 18 reasoning, and 10 output options. Maps task characteristics to the right approaches from the tested library.</p></div>
+  <div id="seo-skill-identity-blocks"><h3>rootnode-identity-blocks</h3><p>Eight tested identity approaches with complete XML templates, selection guidance, and a custom identity builder.</p></div>
+  <div id="seo-skill-reasoning-blocks"><h3>rootnode-reasoning-blocks</h3><p>Eighteen reasoning variants across six categories with complete XML specifications.</p></div>
+  <div id="seo-skill-output-blocks"><h3>rootnode-output-blocks</h3><p>Ten output format specifications with section-by-section length guidance and format constraints.</p></div>
+  <div id="seo-skill-domain-business"><h3>rootnode-domain-business-strategy</h3><p>Specialized prompt methodology for consulting, M&amp;A, corporate strategy, and strategic planning.</p></div>
+  <div id="seo-skill-domain-software"><h3>rootnode-domain-software-engineering</h3><p>Specialized prompt methodology for system design, code review, incident response, security analysis, API design.</p></div>
+  <div id="seo-skill-domain-content"><h3>rootnode-domain-content-communications</h3><p>Specialized prompt methodology for writing, editing, content strategy, copywriting, audience analysis.</p></div>
+  <div id="seo-skill-domain-research"><h3>rootnode-domain-research-analysis</h3><p>Specialized prompt methodology for data analysis, policy research, investigative research, and systematic evidence review.</p></div>
+  <div id="seo-skill-domain-agentic"><h3>rootnode-domain-agentic-context</h3><p>Specialized prompt methodology for designing AI agent system prompts, tool definitions, context architectures, and multi-agent coordination.</p></div>
+</div>
+
+<!-- SHARED SLIDE-IN PANEL -->
+<div class="panel-overlay" id="panelOverlay"></div>
+<aside class="slide-panel" id="slidePanel" role="dialog" aria-label="Details" aria-hidden="true">
+  <button class="slide-panel__close" id="panelClose" aria-label="Close panel">&times;</button>
+  <div class="slide-panel__inner" id="panelContent"></div>
+</aside>
+
+<footer class="footer" role="contentinfo">
+  <div class="container"><div class="footer__grid">
+    <div class="footer__brand">
+      <svg viewBox="100 90 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="#8B929E"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="#8B929E"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="#8B929E"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="#8B929E"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="#8B929E"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="#8B929E"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="#8B929E"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="#8B929E"/></svg>
+      <p class="footer__brand-tagline">The architecture system for Claude Projects</p>
+    </div>
+    <ul class="footer__links">
+      <li><a href="https://github.com/drayline/rootnode-skills" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+    <p class="footer__attribution">A <a href="https://drayline.io" target="_blank" rel="noopener noreferrer">Drayline</a> project</p>
+  </div></div>
+</footer>
+
+<script>
+/* ============ LAYER DATA ============ */
+const LAYERS_DATA = {
+  "user-preferences": {
+    name: "User Preferences", badge: "GLOBAL", badgeClass: "global", scope: "global",
+    what: "Communication style, expertise level, behavioral defaults. Everything here persists across all Projects and all conversations. The foundation layer: what Claude knows about you before any Project loads.",
+    problem: "Preferences are too vague to guide Claude\u2019s behavior. Redundant rules get restated in every Project. Stable patterns stay trapped in Project Memory instead of being promoted globally.",
+    fix: "Evaluates Preference precision, detects redundancies with Project-scoped instructions, and identifies patterns ready for promotion from Project Memory.",
+    activates: ["\u201Coptimize my preferences\u201D", "\u201Care my preferences working?\u201D"],
+    connects: ["Styles", "Global Memory"]
+  },
+  "styles": {
+    name: "Styles", badge: "GLOBAL", badgeClass: "global", scope: "global",
+    what: "Tone, format, and delivery patterns. Applied by selection and can be switched per conversation. Controls how Claude communicates, separate from what it knows or how it reasons.",
+    problem: "Style settings conflict with formatting rules hardcoded in Custom Instructions. Tone preferences get scattered across Projects instead of centralized.",
+    fix: "Detects tension between Style settings and Custom Instructions formatting. Identifies when delivery preferences belong in a Style rather than being hardcoded per Project.",
+    activates: ["\u201CClaude\u2019s tone is off\u201D", "\u201Cformatting is inconsistent\u201D"],
+    connects: ["User Preferences", "Custom Instructions"]
+  },
+  "global-memory": {
+    name: "Global Memory", badge: "GLOBAL", badgeClass: "global", scope: "global",
+    what: "Cross-project context and learned preferences. Auto-synthesized from conversations. Orientation facts that help Claude understand who you are and what matters to you, loaded into every conversation.",
+    problem: "Memory accumulates stale facts, redundant entries, and reference-depth content that belongs in knowledge files. Bloated Memory consumes context budget across every conversation.",
+    fix: "Audits for redundancy and staleness. Rebalances content between Memory, Preferences, and knowledge files. Tracks Memory\u2019s contribution to context overhead.",
+    activates: ["\u201Cpreferences vs global memory analysis\u201D", "\u201Cwhat should be in global memory?\u201D"],
+    connects: ["User Preferences", "Project Memory"]
+  },
+  "skills-layer": {
+    name: "Skills", badge: "GLOBAL", badgeClass: "global", scope: "global",
+    what: "Procedural knowledge packaged in SKILL.md files. Activated automatically by task relevance. Skills use progressive disclosure: a lightweight description loads at startup, the full methodology loads on demand.",
+    problem: "Installed Skills collide with Project knowledge files covering the same territory. The Skill portfolio has gaps that force manual workarounds. Overhead from unused Skills consumes context budget.",
+    fix: "Evaluates Skill portfolio fitness, detects collisions with knowledge files, and converts design specs into deployment-ready Skill packages.",
+    activates: ["\u201Cbuild this Skill\u201D", "\u201Cconvert this to a Skill\u201D"],
+    connects: ["MCP Connectors", "Custom Instructions"]
+  },
+  "mcp-connectors": {
+    name: "MCP Connectors", badge: "GLOBAL", badgeClass: "global", scope: "global",
+    what: "External service integrations like Gmail, Slack, Google Drive, and Notion. Tools loaded on demand through deferred loading: configured once, available everywhere.",
+    problem: "Projects assume connector capabilities that aren\u2019t configured. Connector overhead goes untracked. Alignment between available connectors and Project needs drifts as Projects evolve.",
+    fix: "Checks connector alignment with Project needs, detects assumed capabilities without configured connectors, and accounts for connector overhead.",
+    activates: ["\u201Cwhich integrations do I need\u201D", "\u201Ccheck my connector setup\u201D"],
+    connects: ["Skills", "Knowledge Files"]
+  },
+  "project-memory": {
+    name: "Project Memory", badge: "PROJECT", badgeClass: "project", scope: "project",
+    what: "Phase awareness, active constraints, key decisions. Auto-synthesized per Project. The orientation layer that helps Claude pick up where you left off: what you\u2019re working on, what was decided, what\u2019s next.",
+    problem: "Memory fills with outdated decisions, redundant orientation facts, and content that belongs in Preferences or knowledge files. Claude\u2019s per-conversation orientation degrades as Memory becomes noisy.",
+    fix: "Audits for redundancy and staleness, identifies content ready for promotion or demotion, and produces specific edit prescriptions with human-in-the-loop confirmation.",
+    activates: ["\u201Coptimize my memory\u201D", "\u201Cwhat belongs in memory?\u201D", "\u201Crebalance my project memory\u201D"],
+    connects: ["Global Memory", "Custom Instructions"]
+  },
+  "custom-instructions": {
+    name: "Custom Instructions", badge: "PROJECT \u2014 ALWAYS-LOADED", badgeClass: "project", scope: "project",
+    what: "The behavioral architecture of your Project. Identity, rules, routing, output standards. Everything here loads into every conversation, every time. This is the highest-leverage layer: the right instructions here shape every response Claude produces.",
+    problem: "Instructions that work individually conflict with each other silently. Rules meant for knowledge files bloat the always-loaded context. Behavioral calibration is guesswork. Seven structural anti-patterns hide in plain sight.",
+    fix: "Builds Custom Instructions using the 5-layer prompt architecture (Identity, Objective, Context, Reasoning, Output + Quality Control). Scores instruction clarity across six dimensions. Detects anti-patterns and provides tested countermeasures for Claude\u2019s eight behavioral tendencies.",
+    activates: ["\u201Caudit my custom instructions\u201D", "\u201Cbuild custom instructions for my project\u201D"],
+    connects: ["Knowledge Files", "Project Memory"]
+  },
+  "knowledge-files": {
+    name: "Knowledge Files", badge: "PROJECT \u2014 ON-DEMAND", badgeClass: "project", scope: "project",
+    what: "Searchable reference depth. Documentation, data, and frameworks loaded on demand when a query matches their content. In retrieval mode (~66,500+ tokens), Claude searches rather than loading everything. How files are structured directly affects what gets found.",
+    problem: "Files structured for human reading fail Claude\u2019s retrieval patterns. Orphaned files go unreferenced. Context budget gets consumed by content that belongs in other layers. In retrieval mode, poorly structured files mean Claude can\u2019t find what it needs.",
+    fix: "Runs full budget analysis with per-file evaluation, content routing, growth trajectory, and retrieval quality audit. Detects orphaned files and content misplacement. Designs knowledge file architecture during Project scaffolding.",
+    activates: ["\u201Coptimize my knowledge files\u201D", "\u201Cis my project too big?\u201D"],
+    connects: ["Custom Instructions", "MCP Connectors"]
+  },
+  "conversation-context": {
+    name: "Conversation Context", badge: "CONVERSATION", badgeClass: "conversation", scope: "conversation",
+    what: "Messages, uploads, tool results. Where architecture meets execution. This is the layer where you interact with the Project and where Skills activate through natural language.",
+    problem: "If the layers above are misconfigured, conversation quality suffers in ways that look like Claude\u2019s fault but are actually structural. Output drift, ignored instructions, and degraded quality over long conversations are symptoms of architectural problems, not conversation problems.",
+    fix: "Skills activate through this layer automatically. Keywords and task descriptions trigger the right diagnostic and compilation tools without requiring explicit commands. The architecture is designed so that natural conversation about your Project\u2019s problems surfaces the right tools.",
+    activates: [],
+    connects: ["All layers above"]
+  }
+};
+
+/* ============ SKILLS DATA (19 Skills, 5 groups) ============ */
+const SKILLS_DATA = {
+  diagnose: {
+    label: "Core \u2014 Diagnose",
+    skills: [
+      { id: "project-audit", name: "rootnode-project-audit", desc: "Scores Claude Projects on six dimensions using anchored 1\u20135 rubrics. Now includes global layer awareness. Quick Audit gains Global Layer Notes. Full Audit gains Cross-Layer Alignment section. Reconstruct avoids duplicating Preferences and accounts for installed Skills.", keywords: ["audit my project", "score my project", "audit my custom instructions", "why is my project underperforming", "evaluate my Claude project"], composes: ["global-audit", "anti-pattern-detection", "behavioral-tuning", "memory-optimization"] },
+      { id: "global-audit", name: "rootnode-global-audit", desc: "Audits all five global layers (Preferences, Styles, Memory, Skills, Connectors) using a six-dimension scorecard. Detects eight cross-layer failure modes and produces evolutionary recommendations.", keywords: ["audit my global setup", "optimize my preferences", "review my Claude configuration", "check my cross-project setup"], composes: ["full-stack-audit", "memory-optimization"] },
+      { id: "full-stack-audit", name: "rootnode-full-stack-audit", desc: "Combines Project audit + Global audit + Cross-Layer Alignment into a single comprehensive evaluation. Produces a unified action plan across all nine layers.", keywords: ["run a full stack audit", "audit my entire Claude setup", "full audit of everything"], composes: ["project-audit", "global-audit"] },
+      { id: "anti-pattern-detection", name: "rootnode-anti-pattern-detection", desc: "Detects seven structural patterns that cause ignored instructions and degraded output. Every finding quotes the specific text causing the problem.", keywords: ["what's wrong with my project", "Claude ignores my instructions", "diagnose my project", "why is output inconsistent"], composes: ["project-audit", "behavioral-tuning"] },
+      { id: "prompt-validation", name: "rootnode-prompt-validation", desc: "Six-dimension Prompt Scorecard for evaluating existing prompts. Includes a symptom-to-fix diagnostic map that connects observed problems to specific structural causes.", keywords: ["review my prompt", "score this prompt", "why isn't my prompt working", "what's wrong with my prompt", "improve my prompt"], composes: ["prompt-compilation"] }
+    ]
+  },
+  build: {
+    label: "Core \u2014 Build",
+    skills: [
+      { id: "prompt-compilation", name: "rootnode-prompt-compilation", desc: "Four-stage methodology for building Claude prompts and Project scaffolds: Parse, Select, Construct, Validate. Project Mode now has global layer awareness. Parse/Select/Validate updated. Project Mode output includes a Global Layer Advisory.", keywords: ["build me a prompt", "scaffold a Claude Project", "build custom instructions for my project", "design a prompt for"], composes: ["block-selection", "prompt-validation"] },
+      { id: "skill-builder", name: "rootnode-skill-builder", desc: "Converts design specifications into deployment-ready Skill packages (SKILL.md + references/). Carries the full Skills spec, conversion rules, progressive disclosure patterns, and quality gate.", keywords: ["build this Skill", "convert this to a Skill", "build from this design spec"], composes: ["prompt-compilation"] }
+    ]
+  },
+  optimize: {
+    label: "Core \u2014 Optimize",
+    skills: [
+      { id: "behavioral-tuning", name: "rootnode-behavioral-tuning", desc: "Diagnoses eight Claude behavioral tendencies (verbosity, hedging, list overuse, agreeableness bias, and others) with countermeasure templates ready to paste into system prompts.", keywords: ["Claude is too verbose", "Claude keeps hedging", "Claude agrees with everything", "make Claude more direct", "tune Claude's behavior"], composes: ["project-audit", "anti-pattern-detection"] },
+      { id: "memory-optimization", name: "rootnode-memory-optimization", desc: "Rebalances context across Memory, Custom Instructions, knowledge files, and User Preferences. Now includes the Codification pathway (Memory \u2192 Preferences/CI). Adds the Stability Test and Universality Test for determining the right destination.", keywords: ["optimize my memory", "what belongs in memory?", "rebalance my project memory", "preferences vs memory"], composes: ["project-audit", "context-budget"] },
+      { id: "context-budget", name: "rootnode-context-budget", desc: "Full context budget analysis: two-pool architecture (~66,500 token RAG threshold), per-file evaluation across six dimensions, content routing by category, growth trajectory, retrieval quality audit, and phased optimization with compression safeguards.", keywords: ["run a context budget analysis", "is my project too big?", "optimize my knowledge files", "check my context budget"], composes: ["project-audit", "memory-optimization"] }
+    ]
+  },
+  blocks: {
+    label: "Supporting \u2014 Block Libraries",
+    skills: [
+      { id: "block-selection", name: "rootnode-block-selection", desc: "Decision-tree logic across 8 identity, 18 reasoning, and 10 output options. Maps task characteristics to the right approaches from the tested library.", keywords: ["what approach should I use", "which reasoning method", "what identity fits this task", "help me pick the right approach"], composes: ["prompt-compilation", "identity-blocks", "reasoning-blocks", "output-blocks"] },
+      { id: "identity-blocks", name: "rootnode-identity-blocks", desc: "Eight tested identity approaches (Strategic Advisor, Technical Architect, Research Synthesist, and others) with complete XML templates, selection guidance, and a custom identity builder.", keywords: ["what role should Claude play", "identity for my prompt", "persona for this task", "build a custom role"], composes: ["block-selection", "prompt-compilation"] },
+      { id: "reasoning-blocks", name: "rootnode-reasoning-blocks", desc: "Eighteen reasoning variants across six categories (Analytical, Strategic, Creative, Technical, Research, Comparative) with complete XML specifications.", keywords: ["what reasoning approach", "how should Claude analyze this", "which thinking method fits", "recommend a reasoning pattern"], composes: ["block-selection", "prompt-compilation"] },
+      { id: "output-blocks", name: "rootnode-output-blocks", desc: "Ten output format specifications (Executive Brief, Technical Design Document, Decision Matrix, and others) with section-by-section length guidance and format constraints.", keywords: ["how should I structure this", "what format for a board update", "format for a technical RFC", "help me design an output format"], composes: ["block-selection", "prompt-compilation"] }
+    ]
+  },
+  domains: {
+    label: "Supporting \u2014 Domain Packs",
+    skills: [
+      { id: "domain-business-strategy", name: "rootnode-domain-business-strategy", desc: "Specialized prompt methodology for consulting, M&A, corporate strategy, and strategic planning. 11 tested approaches (3 identity, 4 reasoning, 4 output formats).", keywords: ["M&A analysis", "due diligence prompt", "board narrative", "investment case", "market entry strategy"], composes: ["prompt-compilation"] },
+      { id: "domain-software-engineering", name: "rootnode-domain-software-engineering", desc: "Specialized prompt methodology for system design, code review, incident response, security analysis, API design. 11 tested approaches.", keywords: ["code review prompt", "system design prompt", "security review prompt", "API design prompt", "RFC prompt"], composes: ["prompt-compilation"] },
+      { id: "domain-content-communications", name: "rootnode-domain-content-communications", desc: "Specialized prompt methodology for writing, editing, content strategy, copywriting, audience analysis, and messaging frameworks. 11 tested approaches.", keywords: ["prompt for writing", "content strategy", "prompt for copywriting", "prompt for blog posts"], composes: ["prompt-compilation"] },
+      { id: "domain-research-analysis", name: "rootnode-domain-research-analysis", desc: "Specialized prompt methodology for data analysis, policy research, investigative research, and systematic evidence review. 11 tested approaches.", keywords: ["data analysis prompt", "research prompt", "policy brief prompt", "literature review prompt"], composes: ["prompt-compilation"] },
+      { id: "domain-agentic-context", name: "rootnode-domain-agentic-context", desc: "Specialized prompt methodology for designing AI agent system prompts, tool definitions, context architectures, multi-agent coordination, and agent evaluation. 12 tested approaches.", keywords: ["design an agent", "agent system prompt", "context window architecture", "tool interface design"], composes: ["prompt-compilation"] }
+    ]
+  }
+};
+
+const chevronSVG = '<svg class="skill-node__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* ============ SHARED PANEL SYSTEM ============ */
+const panel = document.getElementById("slidePanel");
+const overlay = document.getElementById("panelOverlay");
+const panelContent = document.getElementById("panelContent");
+let activeEl = null;
+
+function openPanel(html, activeElement) {
+  if (activeEl) activeEl.classList.remove("skill-node--active", "arch-layer--active");
+  activeEl = activeElement;
+  if (activeEl) activeEl.classList.add(activeEl.classList.contains("arch-layer") ? "arch-layer--active" : "skill-node--active");
+  panelContent.innerHTML = html;
+  panelContent.querySelectorAll(".compose-link").forEach(link => {
+    link.addEventListener("click", () => {
+      const id = link.getAttribute("data-compose-id");
+      const s = findSkillById(id);
+      if (s) openSkillPanel(s, findGroupBySkillId(id), document.querySelector('[data-skill-id="' + id + '"]'));
+    });
+  });
+  panel.classList.add("slide-panel--open");
+  panel.setAttribute("aria-hidden", "false");
+  overlay.classList.add("panel-overlay--visible");
+  document.body.style.overflow = "hidden";
+}
+
+function closePanel() {
+  panel.classList.remove("slide-panel--open");
+  panel.setAttribute("aria-hidden", "true");
+  overlay.classList.remove("panel-overlay--visible");
+  document.body.style.overflow = "";
+  if (activeEl) { activeEl.classList.remove("skill-node--active", "arch-layer--active"); activeEl = null; }
+}
+document.getElementById("panelClose").addEventListener("click", closePanel);
+overlay.addEventListener("click", closePanel);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
+
+/* ============ LAYER PANELS ============ */
+document.querySelectorAll(".arch-layer").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const key = btn.getAttribute("data-layer");
+    const d = LAYERS_DATA[key];
+    if (!d) return;
+    const html = '<div class="slide-panel__badge slide-panel__badge--' + d.badgeClass + '">' + d.badge + '</div>' +
+      '<h3 class="slide-panel__title">' + d.name + '</h3>' +
+      '<p class="slide-panel__section-label">What this layer does</p>' +
+      '<div class="bench-note" style="margin-bottom:var(--space-lg)"><p>' + d.what + '</p></div>' +
+      '<p class="slide-panel__section-label">What goes wrong</p>' +
+      '<div class="bench-note" style="margin-bottom:var(--space-lg);border-left-color:var(--gray-500)"><p>' + d.problem + '</p></div>' +
+      '<p class="slide-panel__section-label">What root.node does</p>' +
+      '<div class="bench-note" style="margin-bottom:var(--space-lg);border-left-color:var(--scope-' + d.scope + ')"><p>' + d.fix + '</p></div>' +
+      (d.activates.length ? '<p class="slide-panel__section-label">Activates on</p><div class="slide-panel__pills">' + d.activates.map(k => '<span class="keyword-pill">' + k + '</span>').join("") + '</div>' : '') +
+      '<p class="slide-panel__section-label">Connects to</p>' +
+      '<div class="slide-panel__pills">' + d.connects.map(c => '<span class="keyword-pill">' + c + '</span>').join("") + '</div>';
+    openPanel(html, btn);
+  });
+});
+
+/* ============ SKILLS GRID (5 groups, 2 columns) ============ */
+function buildSkillsGrid() {
+  const coreGroups = ["diagnose", "build", "optimize"];
+  const supportingGroups = ["blocks", "domains"];
+  const coreGrid = document.getElementById("coreSkillsGrid");
+  const supportGrid = document.getElementById("supportingSkillsGrid");
+
+  // Core Skills — 3 cards
+  coreGroups.forEach(key => {
+    const group = SKILLS_DATA[key];
+    if (!group) return;
+    const card = document.createElement("div");
+    card.className = "core-skills__card";
+    const headerLabel = group.label.replace("Core \u2014 ", "");
+    card.innerHTML = '<p class="core-skills__card-header">' + headerLabel + '</p>';
+    const items = document.createElement("div");
+    items.className = "core-skills__card-items";
+    group.skills.forEach(skill => {
+      const node = document.createElement("button");
+      node.className = "skill-node";
+      node.setAttribute("data-skill-id", skill.id);
+      node.setAttribute("aria-label", "View details for " + skill.name);
+      node.innerHTML = '<span class="skill-node__name">' + skill.name.replace("rootnode-", "") + '</span>' + chevronSVG;
+      node.addEventListener("click", () => openSkillPanel(skill, group.label, node));
+      items.appendChild(node);
+    });
+    card.appendChild(items);
+    coreGrid.appendChild(card);
+  });
+
+  // Supporting Skills — 2 individual cards
+  supportingGroups.forEach(key => {
+    const group = SKILLS_DATA[key];
+    if (!group) return;
+    const card = document.createElement("div");
+    card.className = "supporting-skills__card";
+    const headerLabel = group.label.replace("Supporting \u2014 ", "");
+    card.innerHTML = '<p class="supporting-skills__card-header">' + headerLabel + '</p>';
+    const items = document.createElement("div");
+    items.className = "supporting-skills__card-items";
+    group.skills.forEach(skill => {
+      const node = document.createElement("button");
+      node.className = "skill-node";
+      node.setAttribute("data-skill-id", skill.id);
+      node.setAttribute("aria-label", "View details for " + skill.name);
+      node.innerHTML = '<span class="skill-node__name">' + skill.name.replace("rootnode-", "") + '</span>' + chevronSVG;
+      node.addEventListener("click", () => openSkillPanel(skill, group.label, node));
+      items.appendChild(node);
+    });
+    card.appendChild(items);
+    supportGrid.appendChild(card);
+  });
+}
+
+function openSkillPanel(skill, groupName, node) {
+  const html = '<div class="slide-panel__badge slide-panel__badge--skill">' + groupName + '</div>' +
+    '<h3 class="slide-panel__title">' + skill.name + '</h3>' +
+    '<div class="slide-panel__desc"><p>' + skill.desc + '</p></div>' +
+    '<p class="slide-panel__section-label">Activates on</p>' +
+    '<div class="slide-panel__pills">' + skill.keywords.map(k => '<span class="keyword-pill">' + k + '</span>').join("") + '</div>' +
+    '<p class="slide-panel__section-label">Composes with</p>' +
+    '<div class="slide-panel__pills">' + skill.composes.map(id => '<button class="compose-link" data-compose-id="' + id + '">' + id + '</button>').join("") + '</div>' +
+    '<div class="slide-panel__cta"><a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">View on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a></div>';
+  openPanel(html, node);
+}
+
+function findSkillById(id) {
+  for (const g of Object.values(SKILLS_DATA)) {
+    const s = g.skills.find(s => s.id === id);
+    if (s) return s;
+  }
+  return null;
+}
+function findGroupBySkillId(id) {
+  for (const g of Object.values(SKILLS_DATA)) {
+    if (g.skills.find(s => s.id === id)) return g.label;
+  }
+  return "";
+}
+
+/* ============ NAV ============ */
+const nav = document.querySelector(".nav");
+const mobileToggle = document.getElementById("mobileToggle");
+const navLinks = document.getElementById("navLinks");
+window.addEventListener("scroll", () => { nav.classList.toggle("nav--scrolled", window.scrollY > 60); }, { passive: true });
+mobileToggle.addEventListener("click", () => {
+  const o = navLinks.classList.toggle("nav__links--open");
+  mobileToggle.setAttribute("aria-expanded", o);
+});
+navLinks.querySelectorAll(".nav__link").forEach(l => {
+  l.addEventListener("click", () => { navLinks.classList.remove("nav__links--open"); mobileToggle.setAttribute("aria-expanded", "false"); });
+});
+
+/* ============ SCROLL ANIMATIONS ============ */
+const ao = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); ao.unobserve(e.target); } });
+}, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+document.querySelectorAll("[data-animate]").forEach(el => ao.observe(el));
+
+/* ============ COUNT-UP ============ */
+const co = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseFloat(el.getAttribute("data-count"));
+      const decimals = parseInt(el.getAttribute("data-decimals") || "0");
+      const duration = 800;
+      const start = performance.now();
+      function animate(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = eased * target;
+        el.textContent = decimals > 0 ? current.toFixed(decimals) : Math.round(current);
+        if (progress < 1) requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+      co.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll("[data-count]").forEach(el => co.observe(el));
+
+buildSkillsGrid();
+</script>
+</body>
+</html>

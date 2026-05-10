@@ -14,3 +14,8 @@ Per-session change log for rootnode-website. Each CC session appends one entry.
 - HTML validation: html5validator unavailable (Nu Html Checker requires Java; Java not installed on operator system). Python `html.parser` structural parse passed (0 errors, 0 unclosed tags). Full HTML5 spec validation deferred to V2 alongside Java install.
 - Halt-trigger fires: 1 (Phase 5: test backstop unavailability; operator authorized deferral and proceed)
 - Deferred to V2: install Java JRE + restore `html5validator` as Phase 5 backstop
+
+**Commit SHAs:**
+- `e075b36` chore: initial scaffold (Phase 2)
+- `72b5847` copy: update tagline to "The architecture system for Claude" (Phase 5)
+- _this commit_ docs: update change_log with session commit SHAs

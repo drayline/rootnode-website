@@ -1,4 +1,14 @@
+# robots.txt for rootnode.design
+# https://www.robotstxt.org
+
 User-agent: *
 Allow: /
+
+# Disallow common AI-specific aggressive crawlers if desired (operator override)
+# User-agent: GPTBot
+# Disallow: /
+# User-agent: ClaudeBot
+# Disallow: /
+# (Leaving allow-all by default — this is a public landing page and welcomes AI indexing)
 
 Sitemap: https://rootnode.design/sitemap.xml

@@ -1,0 +1,63 @@
+# root.node
+
+> The architecture system for Claude.
+
+root.node is a tested system of 27 modular Skills for diagnosing, building, and optimizing Claude Project and Claude Code environments. Open source under MIT license.
+
+## What it is
+
+- **27 Claude Skills** published as Anthropic-spec Agent Skills
+- **4 architectural scopes**: Global (User Preferences, Styles, Memory, Skills, MCP), Project (Memory, Custom Instructions, Knowledge Files), Conversation (Context, Bridges, Cross-Boundary), Claude Code (Repo, Runtime Skills)
+- **2 surfaces**: chat-side Claude Projects and Claude Code execution environments
+- **10 behavioral countermeasures** for known Claude tendencies
+- **5 domain packs** for specialized prompt methodology
+
+## Core resources
+
+- Catalog repository: https://github.com/drayline/rootnode-skills
+- Website: https://rootnode.design
+
+## Skill categories
+
+### Build
+- rootnode-prompt-compilation: builds prompts and scaffolds Projects
+- rootnode-skill-builder: builds deployment-ready Skill packages
+- rootnode-cc-design: designs Claude Code environments
+
+### Diagnose
+- rootnode-project-audit, rootnode-global-audit, rootnode-anti-pattern-detection, rootnode-prompt-validation, rootnode-repo-hygiene
+
+### Optimize
+- rootnode-behavioral-tuning, rootnode-memory-optimization, rootnode-context-budget
+
+### Cross-Layer
+- rootnode-full-stack-audit (the only Skill auditing Global + Project scopes together)
+
+### Bridge
+- rootnode-project-brief, rootnode-session-handoff
+
+### Cross-Boundary
+- rootnode-handoff-trigger-check, rootnode-profile-builder
+
+### Runtime (Claude Code execution surface)
+- rootnode-critic-gate, rootnode-mode-router
+
+### Block Libraries (Supporting)
+- rootnode-block-selection, rootnode-identity-blocks, rootnode-reasoning-blocks, rootnode-output-blocks
+
+### Domain Packs (Supporting)
+- rootnode-domain-business-strategy, rootnode-domain-software-engineering, rootnode-domain-content-communications, rootnode-domain-research-analysis, rootnode-domain-agentic-context
+
+## How to use
+
+Each Skill installs independently. Install one or install all — they compose additively without competing. See https://github.com/drayline/rootnode-skills for installation instructions per Skill.
+
+## Roadmap
+
+- Routine deployment (scheduled Claude Code surfaces — daily-triad + weekly-audit patterns)
+- rootnode-for-code plugin (curated bundle of highest-impact CC Skills)
+- Calibration Engine (automated regression testing against new Claude model releases)
+
+## Publisher
+
+Drayline LLC. Phoenix, AZ.

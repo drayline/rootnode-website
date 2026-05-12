@@ -40,11 +40,31 @@
   --gold-400: #E5A318;
   --gold-600: #A67208;
 
-  /* Scope colors */
+  /* Scope colors (legacy — used by slide-panel badges) */
   --scope-global: #58a6ff;
   --scope-project: #d29922;
   --scope-conversation: #3fb950;
   --scope-cross: #bc8cff;
+  --scope-cc: #d97580;
+
+  /* Architecture v3.0 — 4-scope tokens (v14 prototype) */
+  --c-global: #bc8cff;
+  --c-project: #d29922;
+  --c-conversation: #e8c97a;
+  --c-cc: #d97580;
+  --c-cross: #b0b8c4;
+
+  --fill-global: #1c1230;
+  --fill-project: #251a0d;
+  --fill-conversation: #2a2415;
+  --fill-cc: #2a1216;
+
+  --pill-bg-global: #261845;        --pill-border-global: #3a2668;
+  --pill-bg-project: #3a2810;       --pill-border-project: #5a3d18;
+  --pill-bg-conversation: #3a311e;  --pill-border-conversation: #5a4f30;
+  --pill-bg-cc: #3d1c20;            --pill-border-cc: #5c2f33;
+  --pill-bg-cross: #1f2228;         --pill-border-cross: #3d434b;
+  --pill-bg-dual: rgba(255,255,255,0.06); --pill-border-dual: rgba(255,255,255,0.22);
 
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', monospace;
@@ -147,91 +167,123 @@ img, svg { display: block; max-width: 100%; }
 
 /* ============ ARCHITECTURE SECTION ============ */
 .architecture { background: var(--dark-900); border-top: var(--border-subtle); }
-.architecture__layout { display: flex; flex-direction: column; gap: var(--space-2xl); }
+.architecture__layout { display: flex; flex-direction: column; gap: var(--space-lg); }
 .architecture__text { max-width: var(--content-narrow); margin: 0 auto; }
 .architecture__text p { margin-bottom: var(--space-md); }
 .architecture__text p:last-child { margin-bottom: 0; }
-.architecture__text::after { content: ''; display: block; width: 60px; height: 1px; background: var(--dark-600); margin: var(--space-xl) auto 0; }
+.architecture__text::after { content: ''; display: block; width: 60px; height: 1px; background: var(--dark-600); margin: var(--space-md) auto 0; }
 
-/* Architecture Diagram — HTML/CSS rebuild */
-.arch-diagram { background: var(--dark-800); border: var(--border-subtle); border-radius: 8px; padding: var(--space-md); overflow: hidden; max-width: 840px; margin: 0 auto; width: 100%; }
-.arch-diagram__title { font-family: var(--font-mono); font-size: 16px; font-weight: 500; color: var(--gray-300); text-align: center; margin-bottom: 4px; }
-.arch-diagram__subtitle { font-family: var(--font-mono); font-size: 13px; color: var(--gray-500); text-align: center; margin-bottom: var(--space-md); }
+/* === Architecture diagram v3.0 (4-scope + dual-band + cross-band) === */
+.arch-diagram-v3 { background: none; border: none; border-radius: 0; padding: 0; box-shadow: none; max-width: 880px; margin: 0 auto; width: 100%; }
 
-/* Cross-layer wrapper */
-.arch-cross { border: 1px dashed var(--scope-cross); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; background: rgba(188,140,255,0.03); }
-.arch-cross__label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--scope-cross); letter-spacing: 1.5px; text-transform: uppercase; text-align: center; margin-bottom: 6px; }
-.arch-cross__pill { display: flex; justify-content: center; margin-bottom: 4px; }
-.arch-cross__pill span { font-family: var(--font-mono); font-size: 13px; color: var(--scope-cross); padding: 3px 10px; background: rgba(188,140,255,0.08); border: 1px solid rgba(188,140,255,0.2); border-radius: 9px; }
-.arch-cross__desc { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); text-align: center; }
+/* Scope-card containers (visual separation between scopes) */
+.scope-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-left-width: 3px; border-radius: 12px; padding: var(--space-md) var(--space-lg); margin-bottom: var(--space-lg); }
+.scope-card:last-of-type { margin-bottom: 0; }
+.scope-card[data-scope="global"]       { border-left-color: var(--c-global); }
+.scope-card[data-scope="project"]      { border-left-color: var(--c-project); }
+.scope-card[data-scope="conversation"] { border-left-color: var(--c-conversation); }
+.scope-card[data-scope="cc"]           { border-left-color: var(--c-cc); }
+.scope-card .section-head { margin-top: 0; }
 
-/* Scope sections */
-.arch-scope { border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative; }
-.arch-scope--global { background: rgba(88,166,255,0.03); }
-.arch-scope--project { background: rgba(210,153,34,0.04); }
-.arch-scope--conversation { background: rgba(63,185,80,0.03); }
-.arch-scope::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; border-radius: 8px 8px 0 0; }
-.arch-scope--global::before { background: var(--scope-global); opacity: 0.25; }
-.arch-scope--project::before { background: var(--scope-project); opacity: 0.25; }
-.arch-scope--conversation::before { background: var(--scope-conversation); opacity: 0.25; }
-.arch-scope__header { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-align: center; margin-bottom: 2px; margin-top: 4px; }
-.arch-scope--global .arch-scope__header { color: var(--scope-global); }
-.arch-scope--project .arch-scope__header { color: var(--scope-project); }
-.arch-scope--conversation .arch-scope__header { color: var(--scope-conversation); }
-.arch-scope__subtitle { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); text-align: center; margin-bottom: 10px; }
+/* Unified pill */
+.pill { display: inline-flex; align-items: center; font-family: var(--font-mono); font-size: 0.66rem; padding: 0.2rem 0.55rem; border-radius: 10px; background: var(--pill-bg, var(--dark-700)); border: 1px solid var(--pill-border, var(--dark-600)); color: var(--pill-color, var(--gray-400)); white-space: nowrap; cursor: pointer; transition: filter 200ms; letter-spacing: 0.01em; font-weight: 500; }
+.pill:hover { filter: brightness(1.25); }
+.pill[data-color="global"]       { --pill-bg: var(--pill-bg-global);       --pill-border: var(--pill-border-global);       --pill-color: var(--c-global); }
+.pill[data-color="project"]      { --pill-bg: var(--pill-bg-project);      --pill-border: var(--pill-border-project);      --pill-color: var(--c-project); }
+.pill[data-color="conversation"] { --pill-bg: var(--pill-bg-conversation); --pill-border: var(--pill-border-conversation); --pill-color: var(--c-conversation); }
+.pill[data-color="cc"]           { --pill-bg: var(--pill-bg-cc);           --pill-border: var(--pill-border-cc);           --pill-color: var(--c-cc); }
+.pill[data-color="cross"]        { --pill-bg: var(--pill-bg-cross);        --pill-border: var(--pill-border-cross);        --pill-color: var(--c-cross); }
+.pill[data-color="dual"]         { --pill-bg: var(--pill-bg-dual);         --pill-border: var(--pill-border-dual);         --pill-color: var(--white); }
+.pill--lg { font-size: 0.72rem; padding: 0.24rem 0.65rem; }
 
-/* Layer blocks */
-.arch-layer { display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 6px; cursor: pointer; transition: all var(--duration-fast) var(--ease-standard); margin-bottom: 6px; border-left: 3px solid transparent; }
-.arch-layer::before { content: ''; width: 22px; flex-shrink: 0; }
-.arch-layer:last-child { margin-bottom: 0; }
-.arch-scope--global .arch-layer { background: rgba(15,29,53,0.8); border-left-color: rgba(88,166,255,0.3); }
-.arch-scope--global .arch-layer:hover { border-left-color: var(--scope-global); background: rgba(15,29,53,1); }
-.arch-scope--project .arch-layer { background: rgba(37,26,13,0.8); border-left-color: rgba(210,153,34,0.3); }
-.arch-scope--project .arch-layer:hover { border-left-color: var(--scope-project); background: rgba(37,26,13,1); }
-.arch-scope--conversation .arch-layer { background: rgba(15,43,27,0.8); border-left-color: rgba(63,185,80,0.3); }
-.arch-scope--conversation .arch-layer:hover { border-left-color: var(--scope-conversation); background: rgba(15,43,27,1); }
-.arch-layer--active.arch-layer { border-left-color: var(--gold-500); }
-.arch-scope--global .arch-layer--active { background: rgba(88,166,255,0.06); }
-.arch-scope--project .arch-layer--active { background: rgba(210,153,34,0.06); }
-.arch-scope--conversation .arch-layer--active { background: rgba(63,185,80,0.06); }
-.arch-layer__info { flex: 1; min-width: 0; }
-.arch-layer__name { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--gray-300); transition: color var(--duration-fast); }
-.arch-layer:hover .arch-layer__name, .arch-layer--active .arch-layer__name { color: var(--white); }
-.arch-layer__desc { font-size: 13px; color: var(--gray-500); margin-top: 2px; line-height: 1.3; }
-.arch-layer__chevron { flex-shrink: 0; margin-left: 8px; color: var(--dark-600); transition: color var(--duration-fast); }
-.arch-layer:hover .arch-layer__chevron { color: var(--gold-500); }
-.arch-layer--active .arch-layer__chevron { color: var(--gold-500); }
-.arch-layer:focus-visible { outline: 2px solid var(--gold-400); outline-offset: 2px; }
-.arch-scope__supporting { font-family: var(--font-mono); font-size: 12px; color: var(--gray-500); text-align: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--dark-700); line-height: 1.5; }
+/* Section header */
+.section-head { display: flex; align-items: baseline; gap: 0.7rem; margin: 1.8rem 0 0.55rem; padding-bottom: 0.4rem; border-bottom: var(--border-subtle); }
+.section-head:first-child { margin-top: 0; }
+.section-head__label { font-family: var(--font-body); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; color: var(--scope-color, var(--white)); }
+.section-head__sub { font-family: var(--font-body); font-size: 0.78rem; color: var(--gray-400); }
+.section-head[data-scope="global"]       { --scope-color: var(--c-global); }
+.section-head[data-scope="project"]      { --scope-color: var(--c-project); }
+.section-head[data-scope="conversation"] { --scope-color: var(--c-conversation); }
+.section-head[data-scope="cc"]           { --scope-color: var(--c-cc); }
+
+/* Sub-header */
+.sub-head { display: flex; align-items: baseline; gap: 0.6rem; margin: 0.8rem 0 0.4rem 0.5rem; }
+.sub-head__label { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em; color: var(--scope-color, var(--gray-400)); }
+.sub-head__sub { font-family: var(--font-body); font-size: 0.74rem; color: var(--gray-400); font-style: italic; }
+.sub-head[data-tone="bridge"]  { --scope-color: var(--c-conversation); }
+.sub-head[data-tone="trigger"] { --scope-color: var(--c-cc); }
+
+/* Cross-layer band */
+.cross-band { width: 100%; background: rgba(26,29,34,0.55); border: 1px dashed rgba(176,184,196,0.55); border-radius: 7px; padding: 0.5rem 0.85rem 0.5rem 1.1rem; display: flex; align-items: center; gap: 0.85rem; margin-bottom: var(--space-lg); cursor: pointer; transition: background 200ms; text-align: left; }
+.cross-band:hover { background: rgba(26,29,34,0.85); }
+.cross-band__label { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; color: var(--c-cross); letter-spacing: 0.16em; width: 180px; flex-shrink: 0; }
+.cross-band__note { font-family: var(--font-body); font-size: 0.74rem; color: var(--gray-300); margin-left: auto; }
+
+/* Row */
+.row { display: flex; width: 100%; align-items: center; gap: 0.85rem; padding: 0.42rem 0.85rem 0.42rem 1.1rem; background: var(--row-fill, var(--dark-700)); border-radius: 6px; margin-bottom: 0.32rem; position: relative; cursor: pointer; transition: filter 200ms; text-align: left; }
+.row:hover { filter: brightness(1.15); }
+.row.is-active { filter: brightness(1.3); }
+.row::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 3px; border-radius: 1.5px; background: var(--row-stripe); opacity: 0.75; }
+.row[data-scope="global"]       { --row-fill: var(--fill-global);       --row-stripe: var(--c-global); }
+.row[data-scope="project"]      { --row-fill: var(--fill-project);      --row-stripe: var(--c-project); }
+.row[data-scope="conversation"] { --row-fill: var(--fill-conversation); --row-stripe: var(--c-conversation); }
+.row[data-scope="cc"]           { --row-fill: var(--fill-cc);           --row-stripe: var(--c-cc); }
+.row--bridge  { --row-stripe: var(--c-conversation); --row-fill: var(--fill-conversation); }
+.row--trigger { --row-stripe: var(--c-cc); --row-fill: rgba(42,18,22,0.55); }
+
+.row__name { font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; color: var(--white); width: 180px; flex-shrink: 0; }
+.row__pills { display: flex; flex-wrap: wrap; gap: 0.28rem; flex: 1; min-width: 0; }
+.row__lead-pill { flex-shrink: 0; }
+.row__line { flex: 0 0 64px; height: 8px; position: relative; }
+.row__line svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.row__line-stroke { fill: none; stroke: var(--row-stripe); stroke-width: 1.4; stroke-dasharray: 4 3; opacity: 0.85; animation: flowDash 1.5s linear infinite; }
+@keyframes flowDash { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -14; } }
+.row__dest { font-family: var(--font-mono); font-size: 0.68rem; color: var(--gray-400); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+.row--trigger .row__dest { color: #b78b91; }
+.row--context .row__pills { flex: 0 0 auto; }
+.row__note { font-family: var(--font-mono); font-size: 0.66rem; color: var(--gray-400); font-style: italic; letter-spacing: 0.01em; min-width: 0; }
+
+/* Dual-surface band */
+.dual-band { width: 100%; margin-top: var(--space-lg); padding: 0.65rem 1rem 0.85rem; background: rgba(26,29,34,0.45); border: 1px dashed rgba(255,255,255,0.14); border-radius: 7px; }
+.dual-band__head { display: flex; align-items: baseline; gap: 0.7rem; padding-bottom: 0.45rem; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.dual-band__label { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700; color: var(--c-cross); letter-spacing: 0.16em; }
+.dual-band__sub { font-family: var(--font-body); font-size: 0.74rem; color: var(--gray-400); font-style: italic; }
+.dual-band__row { display: flex; align-items: center; gap: 0.85rem; padding: 0.35rem 0; width: 100%; cursor: pointer; background: none; text-align: left; }
+.dual-band__row:hover { filter: brightness(1.2); }
+.dual-band__row + .dual-band__row { border-top: 1px dashed rgba(255,255,255,0.05); padding-top: 0.55rem; margin-top: 0.2rem; }
+.dual-band__pill-slot { flex-shrink: 0; width: 145px; display: flex; align-items: center; }
+.dual-band__pill { flex-shrink: 0; }
+.dual-band__desc { font-size: 0.78rem; color: var(--gray-400); flex: 1; min-width: 0; }
+.dual-band__modes { display: flex; gap: 0.28rem; flex-wrap: wrap; flex-shrink: 0; }
+
+/* CC slide-panel badge variant (matches diagram color system) */
+.slide-panel__badge--cc { color: var(--c-cc); background: rgba(217,117,128,0.10); }
 
 /* ============ SKILLS (shared) ============ */
 .skills { background: var(--dark-950); border-top: var(--border-subtle); position: relative; }
 .skills__intro { max-width: var(--content-narrow); margin: 0 auto; margin-bottom: var(--space-md); }
 
-/* ============ CORE SKILLS (3-column cards) ============ */
-.core-skills__cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); max-width: 960px; margin: 0 auto; }
-.core-skills__card { background: var(--dark-800); border: 1px solid var(--dark-600); border-radius: 8px; padding: var(--space-lg); border-top: 2px solid var(--gold-500); }
-.core-skills__card-header { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--gold-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-md); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--dark-600); }
-.core-skills__card-items { display: flex; flex-direction: column; gap: 8px; }
-.core-skills__card-items .skill-node { width: 100%; }
-
-/* ============ SUPPORTING SKILLS (two individual cards) ============ */
-.skills__divider-heading { font-size: var(--text-h2); font-weight: 600; color: var(--white); line-height: 1.2; letter-spacing: -0.01em; margin-top: var(--space-2xl); margin-bottom: var(--space-sm); max-width: var(--content-narrow); margin-left: auto; margin-right: auto; }
-.skills__divider-intro { max-width: var(--content-narrow); margin: 0 auto; margin-bottom: var(--space-md); color: var(--gray-300); }
-.supporting-skills__cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); max-width: 760px; margin: 0 auto; }
-.supporting-skills__card { background: var(--dark-800); border: 1px solid var(--dark-600); border-top: 2px solid var(--gold-500); border-radius: 8px; padding: var(--space-lg); }
-.supporting-skills__card-header { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--gold-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-md); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--dark-600); }
-.supporting-skills__card-items { display: flex; flex-direction: column; gap: 8px; }
-.supporting-skills__card-items .skill-node { width: 100%; }
-.skill-node { padding: 0.75rem 1rem; background: var(--dark-800); border: 1px solid var(--dark-700); cursor: pointer; transition: all var(--duration-fast) var(--ease-standard); display: flex; align-items: center; gap: var(--space-xs); }
-.skill-node__name { font-family: var(--font-mono); font-size: 12.5px; font-weight: 400; color: var(--gray-300); line-height: 1.4; transition: color var(--duration-fast) var(--ease-standard); white-space: nowrap; }
-.skill-node__chevron { margin-left: auto; color: var(--dark-600); flex-shrink: 0; transition: color var(--duration-fast) var(--ease-standard); }
-.skill-node:hover, .skill-node:focus-visible { border-color: var(--gold-500); }
-.skill-node:hover .skill-node__name, .skill-node:focus-visible .skill-node__name { color: var(--white); }
-.skill-node:hover .skill-node__chevron, .skill-node:focus-visible .skill-node__chevron { color: var(--gold-500); }
-.skill-node--active { border-color: var(--gold-500); background: rgba(204,138,10,0.06); }
-.skill-node--active .skill-node__name { color: var(--gold-500); }
-.skill-node:focus-visible { outline: 2px solid var(--gold-400); outline-offset: 2px; }
+/* ============ SKILLS HIERARCHY (Core + Supporting tables) ============ */
+.skills-hierarchy { display: flex; flex-direction: column; gap: var(--space-2xl); max-width: 1060px; margin: 0 auto;
+  margin-top: var(--space-3xl); }
+.skills-section { display: block; margin-bottom: var(--space-xl); }
+.skills-section:last-child { margin-bottom: 0; }
+.skills-section__heading { font-size: var(--text-h2); font-weight: 600; color: var(--white); letter-spacing: -0.01em; margin-bottom: var(--space-sm); }
+.skills-section__intro { color: var(--gray-300); max-width: var(--content-narrow); margin-bottom: var(--space-xl); }
+.skills-subsection { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 10px; padding: var(--space-md) var(--space-lg); margin-bottom: var(--space-lg); }
+.skills-subsection:last-child { margin-bottom: 0; }
+.skills-subsection__heading { font-family: var(--font-mono); font-size: var(--text-small); font-weight: 500; color: var(--gold-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-sm); padding-bottom: var(--space-xs); border-bottom: 1px solid var(--dark-700); }
+.skills-table { width: 100%; border-collapse: collapse; }
+.skills-table th { color: var(--gray-400); font-family: var(--font-mono); font-size: 11px; font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; padding: var(--space-sm) var(--space-md); text-align: left; border-bottom: var(--border-subtle); }
+.skills-table td { padding: var(--space-sm) var(--space-md); border-bottom: var(--border-subtle); vertical-align: top; color: var(--gray-300); font-size: var(--text-small); line-height: 1.6; }
+.skills-table td:first-child { font-family: var(--font-mono); font-size: 13px; color: var(--gold-500); white-space: nowrap; }
+.skills-table td:nth-child(2), .skills-table td:nth-child(3) { font-family: var(--font-mono); font-size: 12px; color: var(--gray-400); width: 70px; white-space: nowrap; }
+.skills-table td code { font-family: var(--font-mono); font-size: 0.92em; color: var(--gold-400); background: var(--dark-900); padding: 0.1em 0.35em; border-radius: 3px; }
+.skills-table__row { cursor: pointer; transition: background var(--duration-fast) var(--ease-standard); }
+.skills-table__row:hover, .skills-table__row:focus-visible { background: rgba(204,138,10,0.04); outline: none; }
+.skills-table__row:focus-visible td:first-child { color: var(--gold-400); }
+.skills-table__row.is-active { background: rgba(204,138,10,0.08); }
+.skills-table__row.is-active td:first-child { color: var(--gold-400); }
 
 /* ============ IN PRACTICE ============ */
 .in-practice { background: var(--dark-900); border-top: var(--border-subtle); }
@@ -248,6 +300,18 @@ img, svg { display: block; max-width: 100%; }
 .example-step__label--result { color: var(--scope-global); }
 .example-step__text { font-size: var(--text-small); color: var(--gray-300); line-height: 1.6; }
 .example-step__text--user { font-family: var(--font-mono); color: var(--gold-400); font-size: 13px; }
+.compose-table { width: 100%; max-width: 1060px; margin: var(--space-lg) auto 0; border-collapse: collapse; }
+.compose-table th, .compose-table td { padding: var(--space-md); text-align: left; border-bottom: var(--border-subtle); vertical-align: top; }
+.compose-table th { color: var(--gray-400); font-family: var(--font-mono); font-size: var(--text-small); font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; }
+.compose-table td:first-child { color: var(--white); font-weight: 500; width: 40%; font-size: var(--text-small); }
+.compose-table td:last-child { color: var(--gray-300); font-size: var(--text-small); line-height: 1.6; }
+.compose-table code { font-family: var(--font-mono); font-size: 0.92em; color: var(--gold-400); background: var(--dark-900); padding: 0.1em 0.35em; border-radius: 3px; }
+.compose-more { max-width: 1060px; margin: var(--space-xl) auto 0; }
+.compose-more summary { cursor: pointer; padding: var(--space-md) 0; color: var(--gold-500); font-family: var(--font-mono); font-size: var(--text-small); letter-spacing: 0.05em; list-style: none; }
+.compose-more summary::-webkit-details-marker { display: none; }
+.compose-more summary::before { content: '+ '; font-weight: 500; }
+.compose-more[open] summary::before { content: '− '; }
+.compose-table--secondary { margin-top: var(--space-md); }
 
 /* ============ SLIDE-IN PANEL ============ */
 .slide-panel { position: fixed; top: 0; right: 0; width: 480px; max-width: 90vw; height: 100vh; background: var(--dark-800); border-left: 1px solid var(--dark-700); z-index: 200; transform: translateX(100%); transition: transform var(--duration-medium) var(--ease-out); overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,0.4); }
@@ -271,23 +335,22 @@ img, svg { display: block; max-width: 100%; }
 .compose-link { font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--gold-500); padding: 0.3rem 0.6rem; background: rgba(204,138,10,0.06); border: 1px solid rgba(204,138,10,0.2); cursor: pointer; transition: all var(--duration-fast) var(--ease-standard); }
 .compose-link:hover { background: rgba(204,138,10,0.12); border-color: var(--gold-500); }
 .slide-panel__cta { margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: var(--border-subtle); }
+.panel__cta { margin-top: var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid rgba(255,255,255,0.08); }
+.panel__cta-link { display: inline-flex; align-items: center; gap: 0.5em; color: var(--gold-500); font-family: var(--font-mono); font-size: var(--text-small); text-decoration: none; padding: var(--space-sm) var(--space-md); border: 1px solid var(--gold-500); border-radius: 6px; transition: background 0.2s ease, color 0.2s ease; }
+.panel__cta-link:hover, .panel__cta-link:focus { background: var(--gold-500); color: #000; outline: none; }
 .panel-overlay { position: fixed; inset: 0; background: rgba(10,12,15,0.6); z-index: 199; opacity: 0; pointer-events: none; transition: opacity var(--duration-medium) var(--ease-standard); }
 .panel-overlay--visible { opacity: 1; pointer-events: auto; }
 .bench-note { padding: 1rem; background: var(--dark-900); border-left: 2px solid var(--gold-500); margin-top: var(--space-xs); }
 .bench-note p { font-size: 13px; color: var(--gray-300); line-height: 1.6; margin-bottom: var(--space-xs); }
 .bench-note p:last-child { margin-bottom: 0; }
 
-/* ============ HOW IT WORKS ============ */
-.how-it-works { background: var(--dark-900); border-top: var(--border-subtle); }
-.how-it-works__grid { display: grid; grid-template-columns: 1fr 1px 1fr; gap: var(--space-xl); }
-.how-it-works__divider { background: var(--dark-700); }
-.workflow__title { font-size: var(--text-h2); font-weight: 600; color: var(--white); margin-bottom: var(--space-xs); letter-spacing: -0.01em; }
-.workflow__subtitle { font-size: var(--text-small); color: var(--gray-400); margin-bottom: var(--space-lg); }
-.workflow__steps { display: flex; flex-direction: column; gap: var(--space-md); }
-.step { display: grid; grid-template-columns: 36px 1fr; gap: var(--space-sm); }
-.step__number { font-family: var(--font-mono); font-size: var(--text-h2); font-weight: 500; color: var(--gold-500); line-height: 1; }
-.step__label { font-size: var(--text-h3); font-weight: 500; color: var(--white); margin-bottom: 4px; }
-.step__desc { font-size: var(--text-small); color: var(--gray-400); line-height: 1.5; }
+/* ============ ROADMAP ============ */
+.section.roadmap { background: var(--dark-900); border-top: var(--border-subtle); }
+.roadmap__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); margin-top: var(--space-xl); max-width: 1060px; margin-left: auto; margin-right: auto; }
+.roadmap__card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-left: 3px solid var(--gold-500); border-radius: 12px; padding: var(--space-lg); transition: background 0.2s ease, border-color 0.2s ease; }
+.roadmap__card:hover { background: rgba(255,255,255,0.06); border-top-color: rgba(255,255,255,0.12); border-right-color: rgba(255,255,255,0.12); border-bottom-color: rgba(255,255,255,0.12); }
+.roadmap__card-title { color: var(--white); font-size: var(--text-h3); font-weight: 600; margin-bottom: var(--space-sm); line-height: 1.3; }
+.roadmap__card-body { color: var(--gray-300); line-height: 1.6; font-size: var(--text-body); }
 
 /* ============ NUMBERS ============ */
 .numbers { background: var(--dark-950); border-top: var(--border-subtle); border-bottom: var(--border-subtle); padding: var(--space-2xl) 0; }
@@ -300,9 +363,9 @@ img, svg { display: block; max-width: 100%; }
 /* ============ FOOTER ============ */
 .footer { background: var(--dark-950); border-top: var(--border-subtle); padding: var(--space-xl) 0; }
 .footer__grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-lg); align-items: center; }
-.footer__brand { display: flex; flex-direction: column; gap: var(--space-xs); }
-.footer__brand svg { height: 22px; width: auto; }
-.footer__brand-tagline { font-size: var(--text-small); color: var(--gray-400); }
+.footer__brand { display: flex; flex-direction: row; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
+.footer__brand svg { height: 22px; width: auto; display: block; }
+.footer__brand-tagline { font-size: var(--text-small); color: var(--gray-400); margin: 0; }
 .footer__links { display: flex; gap: var(--space-lg); list-style: none; }
 .footer__link { font-size: var(--text-small); color: var(--gray-300); transition: color var(--duration-fast); }
 .footer__link:hover { color: var(--white); }
@@ -318,11 +381,10 @@ img, svg { display: block; max-width: 100%; }
   :root { --text-display: 2.5rem; --text-h1: 2rem; --text-h2: 1.5rem; }
   .core-skills__cards { grid-template-columns: repeat(3, 1fr); }
   .supporting-skills__cards { grid-template-columns: 1fr 1fr; }
-  .how-it-works__grid { grid-template-columns: 1fr; gap: var(--space-2xl); }
-  .how-it-works__divider { display: none; }
   .in-practice__examples { grid-template-columns: 1fr; gap: var(--space-lg); }
   .in-practice__divider { display: none; }
   .numbers__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
+  .roadmap__grid { grid-template-columns: 1fr; }
 }
 
 /* ============ RESPONSIVE — Mobile ============ */
@@ -337,10 +399,30 @@ img, svg { display: block; max-width: 100%; }
   .supporting-skills__cards { grid-template-columns: 1fr; }
   .numbers__grid { grid-template-columns: repeat(2, 1fr); }
   .footer__grid { grid-template-columns: 1fr; text-align: center; gap: var(--space-md); }
+  .footer__brand { justify-content: center; }
   .footer__links { justify-content: center; }
   .footer__attribution { text-align: center; }
   .slide-panel { width: 100%; }
   .hero__stats { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+  .compose-table td:first-child { width: auto; }
+  .compose-table th, .compose-table td { padding: var(--space-sm); }
+  .compose-table th { font-size: 10px; }
+  .arch-diagram-v3 { padding: 0; }
+  .row__name { width: 130px; font-size: 0.78rem; }
+  .row { gap: 0.55rem; padding: 0.4rem 0.65rem 0.4rem 0.95rem; }
+  .row__line { display: none; }
+  .row__dest { font-size: 0.62rem; }
+  .cross-band__label { width: 130px; font-size: 0.55rem; }
+  .cross-band__note { font-size: 0.66rem; }
+  .dual-band__pill-slot { width: 120px; }
+  .dual-band__row { flex-wrap: wrap; }
+  .scope-card { padding: var(--space-sm) var(--space-md); border-radius: 8px; }
+  .skills-subsection { padding: var(--space-sm) var(--space-md); border-radius: 8px; }
+  .skills-table th, .skills-table td { padding: var(--space-xs) var(--space-sm); }
+  .skills-table th { font-size: 10px; }
+  .skills-table td:first-child { font-size: 12px; white-space: normal; }
+  .skills-table td:nth-child(2), .skills-table td:nth-child(3) { font-size: 11px; width: 50px; }
+  .skills-table td:last-child { font-size: 13px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -355,12 +437,12 @@ img, svg { display: block; max-width: 100%; }
 
 <nav class="nav" role="navigation" aria-label="Primary navigation">
   <a href="/" class="nav__logo" aria-label="root.node home">
-    <svg viewBox="100 90 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="white"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="white"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="white"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="white"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="white"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="white"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="white"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="white"/></svg>
+    <svg viewBox="136 90 640 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="white"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="white"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="white"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="white"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="white"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="white"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="white"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="white"/></svg>
   </a>
   <ul class="nav__links" id="navLinks">
     <li><a href="#architecture" class="nav__link">Architecture</a></li>
     <li><a href="#skills" class="nav__link">Skills</a></li>
-    <li><a href="#how-it-works" class="nav__link">How It Works</a></li>
+    <li><a href="#in-practice" class="nav__link">Activate</a></li>
     <li><a href="https://github.com/drayline/rootnode-skills" class="nav__link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
   </ul>
   <button class="nav__mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false"><span></span></button>
@@ -373,11 +455,11 @@ img, svg { display: block; max-width: 100%; }
     <div class="hero__bg"><div class="hero__glow"></div><div class="hero__dots"></div></div>
     <div class="container hero__content">
       <div class="hero__wordmark">
-        <svg viewBox="100 90 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="root.node"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="white"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="white"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="white"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="white"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="white"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="white"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="white"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="white"/></svg>
+        <svg viewBox="136 90 640 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="root.node"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="white"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="white"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="white"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="white"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="white"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="white"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="white"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="white"/></svg>
       </div>
-      <h1 id="hero-heading" class="hero__headline">Claude Projects are architecture.<br>Build them like <span style="white-space:nowrap">it<span class="gold-dot" aria-hidden="true"></span></span></h1>
+      <h1 id="hero-heading" class="hero__headline">Claude environments are architecture.<br>Build them like <span style="white-space:nowrap">it<span class="gold-dot" aria-hidden="true"></span></span></h1>
       <p class="hero__subheadline">A tested system of modular Skills that score, diagnose, and build Claude architecture from reusable components.</p>
-      <p class="hero__stats">19 Skills &middot; 92 Blocks &middot; Open Source &middot; <a href="https://github.com/drayline/rootnode-skills" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/stars/drayline/rootnode-skills?style=flat&color=%23CC8A0A" alt="GitHub stars" loading="lazy"></a></p>
+      <p class="hero__stats">27 Skills &middot; 92 Blocks &middot; Open Source &middot; <a href="https://github.com/drayline/rootnode-skills" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/stars/drayline/rootnode-skills?style=flat&color=%23CC8A0A" alt="GitHub stars" loading="lazy"></a></p>
       <div class="hero__actions">
         <a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">Get the Skills on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a>
       </div>
@@ -388,8 +470,10 @@ img, svg { display: block; max-width: 100%; }
   <section class="section prose-section" aria-labelledby="problem-heading">
     <div class="container"><div class="prose-section__inner" data-animate>
       <p class="section__label"><span>01</span> — The problem</p>
-      <h2 id="problem-heading" class="section__heading">How well is your Claude Project actually performing?</h2>
-      <p>A Claude Project that produces decent output can still be structurally unsound. There's no scorecard. No structural diagnostics. No built-in way to know whether your Project is working at 60% of its potential or 95%. root.node gives you the diagnostic tools to find out and the compilation pipeline to fix what you find.</p>
+      <h2 id="problem-heading" class="section__heading">How well is your Claude environment actually performing?</h2>
+      <p>The Claude ecosystem has a layered architecture. How content is distributed across those layers determines whether Claude performs at its potential or works against itself. The hard part isn't building a Project or wiring a Claude Code repo — it's seeing what's quietly working against you.</p>
+      <p>Architectural inefficiencies don't announce themselves. They surface as vague symptoms: output that drifts, instructions that get ignored intermittently, quality that degrades over long conversations, autonomous agents that escalate work they shouldn't or barrel through halts they should respect. These Skills surface those structural issues, triage them by impact, and produce targeted fixes.</p>
+      <p>They treat the entire ecosystem as a unified system — scoring each layer, detecting cross-layer conflicts, diagnosing behavioral tendencies, gating handoffs to autonomous execution, and building Projects and Claude Code environments that are structurally sound from the start.</p>
     </div></div>
   </section>
 
@@ -397,81 +481,203 @@ img, svg { display: block; max-width: 100%; }
   <section class="section architecture" id="architecture" aria-labelledby="arch-heading">
     <div class="container">
       <p class="section__label" data-animate><span>02</span> — The architecture</p>
-      <h2 id="arch-heading" class="section__heading" data-animate>Nine layers. One system.</h2>
+      <h2 id="arch-heading" class="section__heading" data-animate>Two surfaces. Four scopes.</h2>
       <div class="architecture__layout">
         <div class="architecture__text" data-animate data-animate-delay="1">
-          <p>Every Claude Project sits within a nine-layer architecture. Five global layers form the foundation that spans all your Projects. Three project layers shape behavior within a single Project. The conversation layer is where you interact with the system.</p>
-          <p>How content is distributed across these layers determines everything. A rule in the wrong layer gets ignored. A preference that should be global gets restated in every Project. Context budget gets consumed by content that belongs somewhere else. Cross-layer conflicts cause unpredictable output that no amount of prompt rewording will fix.</p>
-          <p>root.node treats the entire architecture as a unified system: scoring each layer, detecting cross-layer conflicts, diagnosing Claude's behavioral tendencies, and building Projects that are structurally sound from the start. The system is calibrated to how Claude actually processes context: the behavioral tendencies documented through extensive testing, the loading behavior of each layer, and the architectural patterns that produce reliable output.</p>
+          <p>Two surfaces, layered architecture across each. Skills are mapped to the layers they impact — a Skill that builds knowledge files appears on the Knowledge Files layer because that's the layer it modifies; a Skill that audits five layers at once appears on each of them.</p>
+          <p>One Skill spans Global and Project scopes. <code>rootnode-full-stack-audit</code> runs Project audit + Global audit + Cross-Layer Alignment in a single pass — the only Skill in the catalog that audits two scopes together rather than within one.</p>
         </div>
 
-        <!-- Architecture Diagram (HTML/CSS rebuild) -->
-        <div class="arch-diagram" data-animate data-animate-delay="2">
-          <p class="arch-diagram__title">The Nine Layers of a Claude Project</p>
-          <p class="arch-diagram__subtitle">Click any layer for details</p>
+        <!-- Architecture Diagram v3.0 (4 scopes + cross-layer + dual-surface) -->
+        <div class="arch-diagram-v3">
 
-          <!-- Cross-layer -->
-          <div class="arch-cross">
-            <p class="arch-cross__label">Cross-Layer</p>
-            <div class="arch-cross__pill"><span>full-stack-audit</span></div>
-            <p class="arch-cross__desc">Spans all 9 layers in one pass</p>
+          <button class="cross-band" data-detail="cross-layer" aria-label="View Cross-Layer details" data-animate>
+            <span class="cross-band__label">CROSS-LAYER</span>
+            <span class="pill pill--lg" data-color="cross">full-stack-audit</span>
+            <span class="cross-band__note">audit all layers of your environment</span>
+          </button>
+
+          <div class="scope-card" data-scope="global" data-animate>
+          <div class="section-head" data-scope="global">
+            <span class="section-head__label">GLOBAL SCOPE</span>
+            <span class="section-head__sub">Foundation across all Projects · shared by every conversation</span>
+          </div>
+          <button class="row" data-scope="global" data-detail="user-preferences">
+            <span class="row__name">User Preferences</span>
+            <span class="row__pills">
+              <span class="pill" data-color="global" data-skill-pill="global-audit">global-audit</span>
+              <span class="pill" data-color="global" data-skill-pill="context-budget">context-budget</span>
+            </span>
+          </button>
+          <button class="row" data-scope="global" data-detail="styles">
+            <span class="row__name">Styles</span>
+            <span class="row__pills">
+              <span class="pill" data-color="global" data-skill-pill="global-audit">global-audit</span>
+            </span>
+          </button>
+          <button class="row" data-scope="global" data-detail="global-memory">
+            <span class="row__name">Global Memory</span>
+            <span class="row__pills">
+              <span class="pill" data-color="global" data-skill-pill="global-audit">global-audit</span>
+              <span class="pill" data-color="global" data-skill-pill="memory-optimization">memory-optimization</span>
+              <span class="pill" data-color="global" data-skill-pill="context-budget">context-budget</span>
+            </span>
+          </button>
+          <button class="row" data-scope="global" data-detail="skills">
+            <span class="row__name">Skills</span>
+            <span class="row__pills">
+              <span class="pill" data-color="global" data-skill-pill="global-audit">global-audit</span>
+              <span class="pill" data-color="global" data-skill-pill="skill-builder">skill-builder ⇄</span>
+              <span class="pill" data-color="global" data-skill-pill="context-budget">context-budget</span>
+            </span>
+          </button>
+          <button class="row" data-scope="global" data-detail="mcp">
+            <span class="row__name">MCP Connectors</span>
+            <span class="row__pills">
+              <span class="pill" data-color="global" data-skill-pill="global-audit">global-audit</span>
+            </span>
+          </button>
           </div>
 
-          <!-- Global Scope -->
-          <div class="arch-scope arch-scope--global">
-            <p class="arch-scope__header">GLOBAL SCOPE</p>
-            <p class="arch-scope__subtitle">Foundation across all Projects</p>
-            <button class="arch-layer" data-layer="user-preferences" aria-label="View User Preferences layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">User Preferences</span><p class="arch-layer__desc">Communication style, expertise level, behavioral defaults.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="scope-card" data-scope="project" data-animate>
+          <div class="section-head" data-scope="project">
+            <span class="section-head__label">PROJECT SCOPE</span>
+            <span class="section-head__sub">Shapes every conversation in a Project</span>
+          </div>
+          <button class="row" data-scope="project" data-detail="project-memory">
+            <span class="row__name">Project Memory</span>
+            <span class="row__pills">
+              <span class="pill" data-color="project" data-skill-pill="project-audit">project-audit</span>
+              <span class="pill" data-color="project" data-skill-pill="memory-optimization">memory-optimization</span>
+            </span>
+          </button>
+          <button class="row" data-scope="project" data-detail="custom-instructions">
+            <span class="row__name">Custom Instructions</span>
+            <span class="row__pills">
+              <span class="pill" data-color="project" data-skill-pill="project-audit">project-audit</span>
+              <span class="pill" data-color="project" data-skill-pill="behavioral-tuning">behavioral-tuning</span>
+              <span class="pill" data-color="project" data-skill-pill="anti-pattern-detection">anti-pattern-detection</span>
+              <span class="pill" data-color="project" data-skill-pill="prompt-compilation">prompt-compilation</span>
+              <span class="pill" data-color="project" data-skill-pill="prompt-validation">prompt-validation</span>
+            </span>
+          </button>
+          <button class="row" data-scope="project" data-detail="knowledge-files">
+            <span class="row__name">Knowledge Files</span>
+            <span class="row__pills">
+              <span class="pill" data-color="project" data-skill-pill="project-audit">project-audit</span>
+              <span class="pill" data-color="project" data-skill-pill="context-budget">context-budget</span>
+            </span>
+          </button>
+          </div>
+
+          <div class="scope-card" data-scope="conversation" data-animate>
+          <div class="section-head" data-scope="conversation">
+            <span class="section-head__label">CONVERSATION SCOPE</span>
+            <span class="section-head__sub">The current exchange</span>
+          </div>
+          <button class="row row--context" data-scope="conversation" data-detail="conversation-context">
+            <span class="row__name">Conversation Context</span>
+            <span class="row__pills">
+              <span class="pill" data-color="conversation" data-skill-pill="blocks">blocks</span>
+              <span class="pill" data-color="conversation" data-skill-pill="domain-packs">domain-packs</span>
+            </span>
+            <span class="row__note">Supporting Skills activate through natural language</span>
+          </button>
+
+          <div class="sub-head" data-tone="bridge">
+            <span class="sub-head__label">↪ BRIDGES</span>
+            <span class="sub-head__sub">connect Projects and conversations across the chat-side ecosystem</span>
+          </div>
+          <button class="row row--bridge" data-detail="project-brief">
+            <span class="row__name">
+              <span class="pill pill--lg row__lead-pill" data-color="conversation" data-skill-pill="project-brief">project-brief</span>
+            </span>
+            <div class="row__line"><svg viewBox="0 0 64 8" preserveAspectRatio="none" aria-hidden="true"><line class="row__line-stroke" x1="0" y1="4" x2="64" y2="4"/></svg></div>
+            <span class="row__dest">Cross-Project bridge → other Projects</span>
+          </button>
+          <button class="row row--bridge" data-detail="session-handoff">
+            <span class="row__name">
+              <span class="pill pill--lg row__lead-pill" data-color="conversation" data-skill-pill="session-handoff">session-handoff</span>
+            </span>
+            <div class="row__line"><svg viewBox="0 0 64 8" preserveAspectRatio="none" aria-hidden="true"><line class="row__line-stroke" x1="0" y1="4" x2="64" y2="4"/></svg></div>
+            <span class="row__dest">Cross-session continuity → other conversations</span>
+          </button>
+
+          <div class="sub-head" data-tone="trigger">
+            <span class="sub-head__label">↘ CROSS-BOUNDARY</span>
+            <span class="sub-head__sub">live in chat-Projects and prepare handoffs to Claude Code</span>
+          </div>
+          <button class="row row--trigger" data-detail="handoff-trigger-check">
+            <span class="row__name">
+              <span class="pill pill--lg row__lead-pill" data-color="cc" data-skill-pill="handoff-trigger-check">handoff-trigger-check</span>
+            </span>
+            <div class="row__line"><svg viewBox="0 0 64 8" preserveAspectRatio="none" aria-hidden="true"><line class="row__line-stroke" x1="0" y1="4" x2="64" y2="4"/></svg></div>
+            <span class="row__dest">→ signals when a Project is ready to hand off to Claude Code</span>
+          </button>
+          <button class="row row--trigger" data-detail="profile-builder">
+            <span class="row__name">
+              <span class="pill pill--lg row__lead-pill" data-color="cc" data-skill-pill="profile-builder">profile-builder</span>
+            </span>
+            <div class="row__line"><svg viewBox="0 0 64 8" preserveAspectRatio="none" aria-hidden="true"><line class="row__line-stroke" x1="0" y1="4" x2="64" y2="4"/></svg></div>
+            <span class="row__dest">→ builds configuration profiles consumed by mode-router</span>
+          </button>
+          </div>
+
+          <div class="scope-card" data-scope="cc" data-animate>
+          <div class="section-head" data-scope="cc">
+            <span class="section-head__label">CLAUDE CODE</span>
+            <span class="section-head__sub">the execution layer</span>
+          </div>
+          <button class="row" data-scope="cc" data-detail="cc-global-user-settings">
+            <span class="row__name">Global User Settings</span>
+            <span class="row__pills">
+              <span class="pill" data-color="cc" data-skill-pill="cc-design">cc-design ⇄</span>
+            </span>
+          </button>
+          <button class="row" data-scope="cc" data-detail="cc-repo">
+            <span class="row__name">Repo</span>
+            <span class="row__pills">
+              <span class="pill" data-color="cc" data-skill-pill="critic-gate">critic-gate</span>
+              <span class="pill" data-color="cc" data-skill-pill="mode-router">mode-router</span>
+              <span class="pill" data-color="cc" data-skill-pill="repo-hygiene">repo-hygiene</span>
+            </span>
+          </button>
+          </div>
+
+          <div class="dual-band" data-animate>
+            <div class="dual-band__head">
+              <span class="dual-band__label">⇄ DUAL-SURFACE</span>
+              <span class="dual-band__sub">Skills that operate in both chat-Projects and Claude Code</span>
+            </div>
+            <button class="dual-band__row" data-detail="skill-builder">
+              <span class="dual-band__pill-slot">
+                <span class="pill pill--lg dual-band__pill" data-color="dual" data-skill-pill="skill-builder">skill-builder ⇄</span>
+              </span>
+              <span class="dual-band__desc">designs, builds, validates Skills · six workflows</span>
+              <span class="dual-band__modes">
+                <span class="pill" data-color="dual">build</span>
+                <span class="pill" data-color="dual">iterate</span>
+                <span class="pill" data-color="dual">optimize</span>
+                <span class="pill" data-color="dual">compare</span>
+                <span class="pill" data-color="dual">review</span>
+                <span class="pill" data-color="dual">revise</span>
+              </span>
             </button>
-            <button class="arch-layer" data-layer="styles" aria-label="View Styles layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">Styles</span><p class="arch-layer__desc">Tone, format, and delivery patterns.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="arch-layer" data-layer="global-memory" aria-label="View Global Memory layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">Global Memory</span><p class="arch-layer__desc">Cross-project context and learned preferences.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="arch-layer" data-layer="skills-layer" aria-label="View Skills layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">Skills</span><p class="arch-layer__desc">Procedural knowledge in SKILL.md files. Activated by task relevance.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="arch-layer" data-layer="mcp-connectors" aria-label="View MCP Connectors layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">MCP Connectors</span><p class="arch-layer__desc">External service integrations. Tools loaded on demand.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <button class="dual-band__row" data-detail="cc-design">
+              <span class="dual-band__pill-slot">
+                <span class="pill pill--lg dual-band__pill" data-color="dual" data-skill-pill="cc-design">cc-design ⇄</span>
+              </span>
+              <span class="dual-band__desc">designs Claude Code environments · five modes</span>
+              <span class="dual-band__modes">
+                <span class="pill" data-color="dual">design</span>
+                <span class="pill" data-color="dual">evolve</span>
+                <span class="pill" data-color="project">research</span>
+                <span class="pill" data-color="project">template</span>
+                <span class="pill" data-color="cc">remediate</span>
+              </span>
             </button>
           </div>
 
-          <!-- Project Scope -->
-          <div class="arch-scope arch-scope--project">
-            <p class="arch-scope__header">PROJECT SCOPE</p>
-            <p class="arch-scope__subtitle">Shapes every conversation in a Project</p>
-            <button class="arch-layer" data-layer="project-memory" aria-label="View Project Memory layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">Project Memory</span><p class="arch-layer__desc">Phase awareness, active constraints, key decisions.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="arch-layer" data-layer="custom-instructions" aria-label="View Custom Instructions layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">Custom Instructions</span><p class="arch-layer__desc">Always-loaded behavioral architecture. Identity, rules, routing, output standards.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="arch-layer" data-layer="knowledge-files" aria-label="View Knowledge Files layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">Knowledge Files</span><p class="arch-layer__desc">Searchable reference depth. Documentation, data, frameworks.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </div>
-
-          <!-- Conversation Scope -->
-          <div class="arch-scope arch-scope--conversation">
-            <p class="arch-scope__header">CONVERSATION SCOPE</p>
-            <p class="arch-scope__subtitle">The current exchange</p>
-            <button class="arch-layer" data-layer="conversation-context" aria-label="View Conversation Context layer details">
-              <div class="arch-layer__info"><span class="arch-layer__name">Conversation Context</span><p class="arch-layer__desc">Where you interact with the Project. Skills activate here through natural language.</p></div>
-              <svg class="arch-layer__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3L9 7L5 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </div>
-
-          <p class="arch-scope__supporting">Supporting Skills (activate in background): block-selection &middot; identity-blocks &middot; reasoning-blocks &middot; output-blocks &middot; 5 domain packs</p>
         </div>
       </div>
     </div>
@@ -482,11 +688,128 @@ img, svg { display: block; max-width: 100%; }
     <div class="container" style="position:relative;z-index:1">
       <p class="section__label" data-animate><span>03</span> — The skills</p>
       <h2 id="skills-heading" class="section__heading" data-animate>Diagnose. Build. Optimize.</h2>
-      <p class="skills__intro" data-animate data-animate-delay="1">Every Skill is extracted from the full root.node methodology, published on GitHub, and works independently. Install one or install all. They compose additively without competing.</p>
-      <div class="core-skills__cards" data-animate data-animate-delay="2" id="coreSkillsGrid"></div>
-      <h3 class="skills__divider-heading" data-animate>The building blocks.</h3>
-      <p class="skills__divider-intro" data-animate>Block libraries provide the tested components. Domain packs add specialized methodology. Both activate automatically during compilation. You can also call them directly.</p>
-      <div class="supporting-skills__cards" data-animate id="supportingSkillsGrid"></div>
+      <p class="skills__intro" data-animate data-animate-delay="1">27 Skills published on GitHub. Each works independently. Install one or install all — they compose additively without competing.</p>
+      <div class="skills-hierarchy">
+
+        <div class="skills-section">
+          <h3 class="skills-section__heading">Core Skills</h3>
+          <p class="skills-section__intro">These operate directly on the architectural layers. Primary tools for building, diagnosing, and maintaining Claude environments across both surfaces.</p>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Build</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="prompt-compilation" tabindex="0" role="button" aria-label="View rootnode-prompt-compilation details"><td><code>rootnode-prompt-compilation</code></td><td>T3</td><td>Chat</td><td>Builds complete prompts and scaffolds Claude Projects via a four-stage Parse/Select/Construct/Validate pipeline.</td></tr>
+                <tr class="skills-table__row" data-detail="skill-builder" tabindex="0" role="button" aria-label="View rootnode-skill-builder details"><td><code>rootnode-skill-builder</code></td><td>T2</td><td>Both ⇄</td><td>Builds deployment-ready Skill packages from design specs. Six workflows: build, iterate, optimize, compare, review, revise.</td></tr>
+                <tr class="skills-table__row" data-detail="cc-design" tabindex="0" role="button" aria-label="View rootnode-cc-design details"><td><code>rootnode-cc-design</code></td><td>T3</td><td>Both ⇄</td><td>Designs Claude Code environments across five modes: design, evolve, research, template, remediate.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Diagnose</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="project-audit" tabindex="0" role="button" aria-label="View rootnode-project-audit details"><td><code>rootnode-project-audit</code></td><td>T3</td><td>Chat</td><td>Scores a Claude Project on six dimensions, surfaces structural issues, and prescribes targeted fixes.</td></tr>
+                <tr class="skills-table__row" data-detail="global-audit" tabindex="0" role="button" aria-label="View rootnode-global-audit details"><td><code>rootnode-global-audit</code></td><td>T3</td><td>Chat</td><td>Audits all five global layers using a six-dimension scorecard and detects cross-layer failure modes.</td></tr>
+                <tr class="skills-table__row" data-detail="anti-pattern-detection" tabindex="0" role="button" aria-label="View rootnode-anti-pattern-detection details"><td><code>rootnode-anti-pattern-detection</code></td><td>T2</td><td>Chat</td><td>Detects seven structural anti-patterns that cause ignored instructions and degraded output.</td></tr>
+                <tr class="skills-table__row" data-detail="prompt-validation" tabindex="0" role="button" aria-label="View rootnode-prompt-validation details"><td><code>rootnode-prompt-validation</code></td><td>T2</td><td>Chat</td><td>Scores prompts on six dimensions and maps each weakness to a structural fix.</td></tr>
+                <tr class="skills-table__row" data-detail="repo-hygiene" tabindex="0" role="button" aria-label="View rootnode-repo-hygiene details"><td><code>rootnode-repo-hygiene</code></td><td>T3</td><td>Code</td><td>Audits a Claude Code deployment via 14-category sweep, 7-layer leak check, and anti-pattern detection.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Optimize</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="behavioral-tuning" tabindex="0" role="button" aria-label="View rootnode-behavioral-tuning details"><td><code>rootnode-behavioral-tuning</code></td><td>T2</td><td>Chat</td><td>Diagnoses ten Claude behavioral tendencies and supplies countermeasure templates.</td></tr>
+                <tr class="skills-table__row" data-detail="memory-optimization" tabindex="0" role="button" aria-label="View rootnode-memory-optimization details"><td><code>rootnode-memory-optimization</code></td><td>T2</td><td>Chat</td><td>Rebalances content across Memory, Custom Instructions, knowledge files, and User Preferences with edit prescriptions.</td></tr>
+                <tr class="skills-table__row" data-detail="context-budget" tabindex="0" role="button" aria-label="View rootnode-context-budget details"><td><code>rootnode-context-budget</code></td><td>T3</td><td>Chat</td><td>Analyzes context budget across two pools with per-file evaluation, content routing, and phased optimization.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Cross-Layer</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="full-stack-audit" tabindex="0" role="button" aria-label="View rootnode-full-stack-audit details"><td><code>rootnode-full-stack-audit</code></td><td>T3</td><td>Chat</td><td>Runs Project audit + Global audit + Cross-Layer Alignment in one pass and produces a unified impact-ordered action plan.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Bridge</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="project-brief" tabindex="0" role="button" aria-label="View rootnode-project-brief details"><td><code>rootnode-project-brief</code></td><td>T1</td><td>Chat</td><td>Generates an uploadable Project Brief — goals, architecture, knowledge files, instructions, Memory, and key decisions.</td></tr>
+                <tr class="skills-table__row" data-detail="session-handoff" tabindex="0" role="button" aria-label="View rootnode-session-handoff details"><td><code>rootnode-session-handoff</code></td><td>T1</td><td>Chat</td><td>Produces a session continuation document capturing active work, decisions, files, knowledge, and open items.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Cross-Boundary</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="handoff-trigger-check" tabindex="0" role="button" aria-label="View rootnode-handoff-trigger-check details"><td><code>rootnode-handoff-trigger-check</code></td><td>T1</td><td>Chat</td><td>Evaluates handoff readiness via a 7-condition gate and returns a structured JSON verdict.</td></tr>
+                <tr class="skills-table__row" data-detail="profile-builder" tabindex="0" role="button" aria-label="View rootnode-profile-builder details"><td><code>rootnode-profile-builder</code></td><td>T1</td><td>Chat</td><td>Builds schema-validated configuration profiles via progressive-depth interview; consumed by <code>mode-router</code> and <code>critic-gate</code>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Runtime</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="critic-gate" tabindex="0" role="button" aria-label="View rootnode-critic-gate details"><td><code>rootnode-critic-gate</code></td><td>T2</td><td>Code</td><td>Profile-driven gate that evaluates work against thresholds before merge, returning a structured verdict.</td></tr>
+                <tr class="skills-table__row" data-detail="mode-router" tabindex="0" role="button" aria-label="View rootnode-mode-router details"><td><code>rootnode-mode-router</code></td><td>T1</td><td>Code</td><td>Profile-driven router that dispatches Claude Code work by strictness, scope, or context.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="skills-section">
+          <h3 class="skills-section__heading">Supporting Skills</h3>
+          <p class="skills-section__intro">These activate automatically when Core Skills need them. They provide the specialized methodology the Compiler and audit tools draw on during assembly and evaluation.</p>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Block Libraries</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>What it does</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="block-selection" tabindex="0" role="button" aria-label="View rootnode-block-selection details"><td><code>rootnode-block-selection</code></td><td>T2</td><td>Chat</td><td>Decision-tree router that picks the right identity, reasoning, and output approach per task.</td></tr>
+                <tr class="skills-table__row" data-detail="identity-blocks" tabindex="0" role="button" aria-label="View rootnode-identity-blocks details"><td><code>rootnode-identity-blocks</code></td><td>T1</td><td>Chat</td><td>Catalog of 8 tested identity approaches for shaping Claude's expertise orientation.</td></tr>
+                <tr class="skills-table__row" data-detail="reasoning-blocks" tabindex="0" role="button" aria-label="View rootnode-reasoning-blocks details"><td><code>rootnode-reasoning-blocks</code></td><td>T1</td><td>Chat</td><td>Catalog of 18 reasoning variants across Analytical, Strategic, Creative, Technical, Research, and Comparative categories.</td></tr>
+                <tr class="skills-table__row" data-detail="output-blocks" tabindex="0" role="button" aria-label="View rootnode-output-blocks details"><td><code>rootnode-output-blocks</code></td><td>T1</td><td>Chat</td><td>Catalog of 10 tested output format specifications for structured deliverables.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="skills-subsection" data-animate>
+            <h4 class="skills-subsection__heading">Domain Packs</h4>
+            <table class="skills-table">
+              <thead><tr><th>Skill</th><th>Tier</th><th>Surface</th><th>Domain</th></tr></thead>
+              <tbody>
+                <tr class="skills-table__row" data-detail="domain-business-strategy" tabindex="0" role="button" aria-label="View rootnode-domain-business-strategy details"><td><code>rootnode-domain-business-strategy</code></td><td>T1</td><td>Chat</td><td>Specialized prompt methodology for consulting, competitive analysis, corporate strategy, and M&amp;A.</td></tr>
+                <tr class="skills-table__row" data-detail="domain-software-engineering" tabindex="0" role="button" aria-label="View rootnode-domain-software-engineering details"><td><code>rootnode-domain-software-engineering</code></td><td>T1</td><td>Chat</td><td>Specialized prompt methodology for system design, code review, incident response, security, and API work.</td></tr>
+                <tr class="skills-table__row" data-detail="domain-content-communications" tabindex="0" role="button" aria-label="View rootnode-domain-content-communications details"><td><code>rootnode-domain-content-communications</code></td><td>T1</td><td>Chat</td><td>Specialized prompt methodology for writing, editing, content strategy, copywriting, and persuasion.</td></tr>
+                <tr class="skills-table__row" data-detail="domain-research-analysis" tabindex="0" role="button" aria-label="View rootnode-domain-research-analysis details"><td><code>rootnode-domain-research-analysis</code></td><td>T1</td><td>Chat</td><td>Specialized prompt methodology for data analysis, policy research, evidence synthesis, and systematic review.</td></tr>
+                <tr class="skills-table__row" data-detail="domain-agentic-context" tabindex="0" role="button" aria-label="View rootnode-domain-agentic-context details"><td><code>rootnode-domain-agentic-context</code></td><td>T1</td><td>Chat</td><td>Specialized prompt methodology for AI agent design, tool interfaces, context architecture, and multi-agent coordination.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
       <div style="margin-top:var(--space-lg);text-align:center" data-animate>
         <a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">Browse the Skills on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a>
       </div>
@@ -498,93 +821,79 @@ img, svg { display: block; max-width: 100%; }
     <div class="container">
       <p class="section__label" data-animate><span>04</span> — In practice</p>
       <h2 id="practice-heading" class="section__heading" data-animate>What it looks like to use root.node.</h2>
-      <p class="in-practice__intro" data-animate data-animate-delay="1">Install a Skill. Talk to Claude about your Project. The right tools activate automatically.</p>
-      <div class="in-practice__examples" data-animate data-animate-delay="2">
-        <div class="example-card">
-          <h3 class="example-card__title">Audit an existing Project</h3>
-          <div class="example-step">
-            <p class="example-step__label example-step__label--user">You say</p>
-            <p class="example-step__text example-step__text--user">"Audit my project"</p>
-          </div>
-          <div class="example-step">
-            <p class="example-step__label example-step__label--system">root.node does</p>
-            <p class="example-step__text">Ingests your Custom Instructions, knowledge files, and Memory. Scores six dimensions with anchored rubrics. Detects structural anti-patterns. Checks for behavioral miscalibrations. Cross-references global layer configuration.</p>
-          </div>
-          <div class="example-step">
-            <p class="example-step__label example-step__label--result">You get</p>
-            <p class="example-step__text">A scored diagnostic with the specific text causing each issue, the pattern it matches, and tested fixes ranked by impact. Act on the findings in the same conversation.</p>
-          </div>
-        </div>
-        <div class="in-practice__divider"></div>
-        <div class="example-card">
-          <h3 class="example-card__title">Build a new Project from scratch</h3>
-          <div class="example-step">
-            <p class="example-step__label example-step__label--user">You say</p>
-            <p class="example-step__text example-step__text--user">"Scaffold a Claude Project for competitive analysis research"</p>
-          </div>
-          <div class="example-step">
-            <p class="example-step__label example-step__label--system">root.node does</p>
-            <p class="example-step__text">Parses the task requirements. Selects the right identity approach, reasoning variant, and output format from the block library. Reads your global configuration to avoid redundancy. Assembles a full Project scaffold using the 5-layer prompt architecture.</p>
-          </div>
-          <div class="example-step">
-            <p class="example-step__label example-step__label--result">You get</p>
-            <p class="example-step__text">Complete Custom Instructions, a knowledge file architecture plan, Memory design, and a Global Layer Advisory. Validated against the six-dimension scorecard before you deploy it.</p>
-          </div>
-        </div>
-      </div>
+      <table class="compose-table" data-animate data-animate-delay="1">
+        <thead><tr><th>You say</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td>"Build me a Claude Project for our engineering team's code review workflow."</td><td>Compilation builds the full scaffold — Custom Instructions, knowledge file architecture, global layer advisory. The software engineering domain pack provides specialized approaches.</td></tr>
+          <tr><td>"Audit my project. Output quality has been inconsistent."</td><td>Project audit scores six dimensions, detects anti-patterns, and produces prioritized fixes grounded in evidence from your Project.</td></tr>
+          <tr><td>"Run a full stack audit of everything — my project and my global setup."</td><td>Full-stack audit runs both Project and Global scorecards, checks cross-layer alignment across all nine layers, and produces a unified action plan.</td></tr>
+          <tr><td>"Design a Claude Code environment for our deployment automation repo."</td><td><code>cc-design</code> DESIGN mode produces a CLAUDE.md draft with R1–R5 required sections, agent topology, scope authorization clauses, halt-and-escalate triggers, and a Skills/hooks/MCP plan tuned to the repo.</td></tr>
+          <tr><td>"Are we ready to hand this off to Claude Code?"</td><td><code>handoff-trigger-check</code> walks the 7-condition gate (spec stability, verification surface, invariants, pump-primer, work decomposition, rollback cost, token budget) and returns a structured verdict with what's missing.</td></tr>
+          <tr><td>"Run a hygiene check on this Claude Code repo."</td><td><code>repo-hygiene</code> runs the 14-category sweep, 7-layer leak check, and anti-pattern detection. Produces <code>HYGIENE_REPORT.md</code> ready for <code>cc-design</code> REMEDIATE mode to consume.</td></tr>
+          <tr><td>"Capture this Project's context so I can use it in another Project."</td><td>Project brief generates a structured upload-ready document with the Project's goals, architecture, knowledge files, instructions summary, and key decisions.</td></tr>
+        </tbody>
+      </table>
+      <details class="compose-more" data-animate data-animate-delay="2">
+        <summary><strong>More examples</strong></summary>
+        <table class="compose-table compose-table--secondary">
+          <thead><tr><th>You say</th><th>What happens</th></tr></thead>
+          <tbody>
+            <tr><td>"Wrap up this session. Build a handoff for the next conversation."</td><td>Session handoff captures active work streams, decisions with rationale, open items, and a starter prompt for the next conversation.</td></tr>
+            <tr><td>"Build me a Claude Project for an agent that does research and writes reports."</td><td>Compilation builds the full scaffold. The agentic domain pack provides agent-specific methodology: tool interface design, context architecture, failure mode planning.</td></tr>
+            <tr><td>"What's wrong with my project? Claude keeps ignoring my instructions."</td><td>Anti-pattern detection checks for seven structural patterns. Every finding quotes the specific text causing the problem.</td></tr>
+            <tr><td>"Optimize my memory. I think it needs to be trimmed."</td><td>Memory optimization audits for redundancy and staleness, identifies what should be promoted to Preferences or demoted to knowledge files, and produces specific edit prescriptions.</td></tr>
+            <tr><td>"Claude keeps agreeing with everything and won't push back."</td><td>Behavioral tuning diagnoses the specific tendencies and provides countermeasure templates to deploy in Custom Instructions.</td></tr>
+            <tr><td>"Run a context budget analysis."</td><td>Runs a full context budget analysis — per-file evaluation, content routing, retrieval quality — and recommends goal-informed optimizations for your Project.</td></tr>
+            <tr><td>"Set up a critic profile for this repo's CI."</td><td><code>profile-builder</code> walks an interview against the critic-gate schema, validates answers, and writes the profile. <code>critic-gate</code> then reads it at runtime to evaluate every change against your configured thresholds.</td></tr>
+            <tr><td>"Build this Skill from my design spec."</td><td>Skill builder converts your spec into a deployment-ready package (SKILL.md + references/ + scripts/ + agents/) following the full Skills specification, with a 9-dimension quality gate before ship.</td></tr>
+            <tr><td>"Help me pick the right reasoning approach for this analytical task."</td><td>Block selection walks the decision tree across the 18 reasoning variants and recommends the best fit with rationale.</td></tr>
+          </tbody>
+        </table>
+      </details>
     </div>
   </section>
 
-  <!-- 05 — THE WORKFLOW -->
-  <section class="section how-it-works" id="how-it-works" aria-labelledby="hiw-heading">
-    <div class="container">
-      <p class="section__label" data-animate><span>05</span> — The workflow</p>
-      <h2 id="hiw-heading" class="section__heading" data-animate>Compile, don't compose.</h2>
-      <p data-animate data-animate-delay="1" style="max-width:var(--content-narrow);margin:0 auto var(--space-2xl);color:var(--gray-300)">Traditional Project design is composition: write instructions, test them, tweak by feel, hope they hold. root.node replaces that with compilation: a structured process that assembles complete Claude architectures from tested components.</p>
-      <div class="how-it-works__grid" data-animate data-animate-delay="2">
-        <div>
-          <h3 class="workflow__title">The Compiler</h3>
-          <p class="workflow__subtitle">Build Projects from tested components</p>
-          <div class="workflow__steps">
-            <div class="step"><span class="step__number">1</span><div><p class="step__label">Parse</p><p class="step__desc">Analyze the task. What does the Project need to accomplish? What domain expertise, reasoning depth, output format, and behavioral calibration does it require? In Project Mode, the Compiler also reads your global configuration (User Preferences, installed Skills, and MCP Connectors) to inform the scaffold.</p></div></div>
-            <div class="step"><span class="step__number">2</span><div><p class="step__label">Select</p><p class="step__desc">Choose the right blocks. Decision trees map task characteristics to the best identity approach, reasoning variant, and output format from the tested library. Domain packs activate automatically for specialized tasks.</p></div></div>
-            <div class="step"><span class="step__number">3</span><div><p class="step__label">Construct</p><p class="step__desc">Assemble the Project using the 5-layer prompt architecture (Identity, Objective, Context, Reasoning, Output + Quality Control). Blocks slot into their layer. Knowledge file architecture, Memory design, and a global layer advisory are included in the scaffold.</p></div></div>
-            <div class="step"><span class="step__number">4</span><div><p class="step__label">Validate</p><p class="step__desc">Score the compiled Project against 6 quality dimensions. Check global layer alignment. Catch architectural flaws before deployment, not after.</p></div></div>
-          </div>
-        </div>
-        <div class="how-it-works__divider"></div>
-        <div>
-          <h3 class="workflow__title">The Optimizer</h3>
-          <p class="workflow__subtitle">Diagnose and fix existing Projects</p>
-          <div class="workflow__steps">
-            <div class="step"><span class="step__number">1</span><div><p class="step__label">Parse</p><p class="step__desc">Ingest the existing Project architecture: Custom Instructions, knowledge files, Memory. For global and full-stack audits, also parse User Preferences, Styles, installed Skills, and configured MCP Connectors.</p></div></div>
-            <div class="step"><span class="step__number">2</span><div><p class="step__label">Diagnose</p><p class="step__desc">Score against the 6-dimension Project Scorecard and, for global audits, the 6-dimension Global Layer Scorecard. Detect structural anti-patterns, behavioral miscalibrations, and cross-layer failure modes, all with evidence from the Project materials.</p></div></div>
-            <div class="step"><span class="step__number">3</span><div><p class="step__label">Prescribe</p><p class="step__desc">Produce targeted fixes ranked by impact. Every prescription references the specific text causing the issue and the tested countermeasure. For full-stack audits, produce evolutionary recommendations: promotions, demotions, codifications, and Skill extractions.</p></div></div>
-            <div class="step"><span class="step__number">4</span><div><p class="step__label">Reconstruct</p><p class="step__desc">Optionally rebuild the Project architecture from the ground up using the Compiler methodology, informed by everything the diagnosis revealed.</p></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 06 — NUMBERS -->
+  <!-- NUMBERS -->
   <section class="numbers" aria-label="Key metrics">
     <div class="container"><div class="numbers__grid" data-animate>
       <div class="metric"><p class="metric__value metric__value--gold" data-count="92">0</p><p class="metric__label">prompt blocks</p></div>
-      <div class="metric"><p class="metric__value" data-count="19">0</p><p class="metric__label">Claude Skills</p></div>
+      <div class="metric"><p class="metric__value" data-count="27">0</p><p class="metric__label">Claude Skills</p></div>
       <div class="metric"><p class="metric__value" data-count="5">0</p><p class="metric__label">domain packs</p></div>
-      <div class="metric"><p class="metric__value" data-count="6">0</p><p class="metric__label">scorecard dimensions</p></div>
-      <div class="metric"><p class="metric__value" data-count="8">0</p><p class="metric__label">behavioral countermeasures</p></div>
+      <div class="metric"><p class="metric__value" data-count="4">0</p><p class="metric__label">architectural scopes</p></div>
+      <div class="metric"><p class="metric__value" data-count="10">0</p><p class="metric__label">behavioral countermeasures</p></div>
     </div></div>
   </section>
 
-  <!-- 06 — THE AUDIENCE -->
-  <section class="section prose-section" aria-labelledby="who-heading">
+  <!-- 05 — ROADMAP -->
+  <section class="section roadmap" id="roadmap" aria-labelledby="roadmap-heading">
+    <div class="container" data-animate>
+      <p class="section__label"><span>05</span> — Roadmap</p>
+      <h2 id="roadmap-heading" class="section__heading">On the horizon.</h2>
+
+      <div class="roadmap__grid" data-animate data-animate-delay="2">
+        <div class="roadmap__card">
+          <h3 class="roadmap__card-title">Routine deployment</h3>
+          <p class="roadmap__card-body">Scheduled Claude Code surfaces — daily-triad and weekly-audit patterns — for continuous-watch governance instead of session-by-session invocation. Composition pattern locked; deployment in active design.</p>
+        </div>
+        <div class="roadmap__card">
+          <h3 class="roadmap__card-title">rootnode-for-code plugin</h3>
+          <p class="roadmap__card-body">A curated bundle of the highest-impact CC Skills shipped as a single plugin install. The system without picking Skills à la carte.</p>
+        </div>
+        <div class="roadmap__card">
+          <h3 class="roadmap__card-title">Calibration Engine</h3>
+          <p class="roadmap__card-body">Automated regression testing against new Claude model releases. Catches behavioral drift before it lands in user environments and recalibrates countermeasures across the catalog.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 — THE WORKFLOW -->
+  <section class="section prose-section" id="workflow" aria-labelledby="workflow-heading">
     <div class="container"><div class="prose-section__inner" data-animate>
-      <p class="section__label"><span>06</span> — The audience</p>
-      <h2 id="who-heading" class="section__heading">For practitioners who build with Claude.</h2>
-      <p>root.node is built for people who use Claude Projects for real work. Not casual prompt experimentation. Structured, repeated workflows where output quality directly affects outcomes.</p>
-      <p>You'll get the most from these Skills if you're already building Projects and want to understand what's working, what's not, and why. Whether that means auditing a Project you've been running for months, scaffolding a new one from tested components, or diagnosing why quality degrades over long conversations.</p>
+      <p class="section__label"><span>06</span> — The workflow</p>
+      <h2 id="workflow-heading" class="section__heading">End-to-end optimization.</h2>
+      <p>root.node covers four architectural scopes, each with its own layers. The Skills map to how the work flows. Design a Claude Project, build it out, and hand off to Claude Code when execution warrants autonomy. Design the repo, deploy, and iterate. What you learn during shipping enhances the next design pass.</p>
+      <p>root.node optimizes every step of the loop. Diagnose what's structurally working against you, build with tested components, and correct when the architecture drifts.</p>
       <div style="margin-top:var(--space-xl)">
         <a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">Get the Skills on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a>
       </div>
@@ -602,7 +911,10 @@ img, svg { display: block; max-width: 100%; }
   <div id="seo-layer-project-memory"><h3>Project Memory</h3><p>Phase awareness, active constraints, key decisions. Auto-synthesized per Project. The orientation layer that helps Claude pick up where you left off: what you're working on, what was decided, what's next.</p><p>Memory fills with outdated decisions, redundant orientation facts, and content that belongs in Preferences or knowledge files. Claude's per-conversation orientation degrades as Memory becomes noisy.</p><p>Audits for redundancy and staleness, identifies content ready for promotion or demotion, and produces specific edit prescriptions with human-in-the-loop confirmation.</p></div>
   <div id="seo-layer-ci"><h3>Custom Instructions</h3><p>The behavioral architecture of your Project. Identity, rules, routing, output standards. Everything here loads into every conversation, every time. This is the highest-leverage layer: the right instructions here shape every response Claude produces.</p><p>Instructions that work individually conflict with each other silently. Rules meant for knowledge files bloat the always-loaded context. Behavioral calibration is guesswork. Seven structural anti-patterns hide in plain sight.</p><p>Builds Custom Instructions using the 5-layer prompt architecture. Scores instruction clarity across six dimensions. Detects anti-patterns and provides tested countermeasures for Claude's eight behavioral tendencies.</p></div>
   <div id="seo-layer-kf"><h3>Knowledge Files</h3><p>Searchable reference depth. Documentation, data, and frameworks loaded on demand when a query matches their content. In retrieval mode, Claude searches rather than loading everything. How files are structured directly affects what gets found.</p><p>Files structured for human reading fail Claude's retrieval patterns. Orphaned files go unreferenced. Context budget gets consumed by content that belongs in other layers.</p><p>Runs full budget analysis with per-file evaluation, content routing, growth trajectory, and retrieval quality audit. Detects orphaned files and content misplacement.</p></div>
-  <div id="seo-layer-conversation"><h3>Conversation Context</h3><p>Messages, uploads, tool results. Where architecture meets execution. This is the layer where you interact with the Project and where Skills activate through natural language.</p><p>If the layers above are misconfigured, conversation quality suffers in ways that look like Claude's fault but are actually structural.</p><p>Skills activate through this layer automatically. Keywords and task descriptions trigger the right diagnostic and compilation tools without requiring explicit commands.</p></div>
+  <div id="seo-layer-conversation"><h3>Conversation Context</h3><p>The current exchange. Where you interact with the Project. Two Skill categories activate here in the background — block libraries and domain packs — contributing structure, identity, reasoning frames, output formats, and domain expertise as needed.</p><p>If the layers above are misconfigured, conversation quality suffers in ways that look like Claude's fault but are actually structural. Output drift, ignored instructions, and degraded quality over long conversations are symptoms of architectural problems.</p><p>Skills activate through this layer automatically. Keywords and task descriptions trigger the right diagnostic and compilation tools without requiring explicit commands.</p></div>
+  <div id="seo-layer-cross-layer"><h3>Cross-Layer</h3><p>The only Skill that operates across multiple scopes simultaneously. Detects misalignment between Global setup and Project setup that single-scope audits cannot see.</p><p>Single-scope audits cannot see cross-scope drift. A rule in Custom Instructions might fight a User Preference. A Knowledge File might duplicate something already in Global Memory.</p><p>rootnode-full-stack-audit runs Project audit + Global audit + Cross-Layer Alignment in a single pass — the only Skill in the catalog that operates across scopes rather than within one. Detects collisions across scopes and produces a unified action plan ordered by impact.</p></div>
+  <div id="seo-layer-cc-global-user-settings"><h3>Claude Code · Global User Settings</h3><p>The ~/.claude/ directory containing personal settings, MCP servers, and user-installed Skills available across all repos. Where dual-surface Skills live on the Claude Code side.</p><p>Drift between user-level settings and repo-level expectations leads to inconsistent execution across repos.</p><p>cc-design installs at the user level — available to act on any Claude Code repo without per-repo reinstallation.</p></div>
+  <div id="seo-layer-cc-repo"><h3>Claude Code · Repo</h3><p>The repo's .claude/ directory containing repo-specific rules, agent definitions, hooks, and policies. The execution layer — where autonomous work happens against the codebase. Reads configuration profiles produced upstream by profile-builder.</p><p>Claude Code repos drift over time — patterns calcify, anti-patterns accumulate. Risky changes need a gate before they hit the repo, not after.</p><p>critic-gate provides pre-commit safety review. mode-router routes work by profile-driven strictness per file class. repo-hygiene runs a 14-category sweep plus 7-layer leak check across an existing Claude Code deployment.</p></div>
 </div>
 
 <!-- SEO: All skill panel content rendered in DOM for crawlability -->
@@ -626,6 +938,14 @@ img, svg { display: block; max-width: 100%; }
   <div id="seo-skill-domain-content"><h3>rootnode-domain-content-communications</h3><p>Specialized prompt methodology for writing, editing, content strategy, copywriting, audience analysis.</p></div>
   <div id="seo-skill-domain-research"><h3>rootnode-domain-research-analysis</h3><p>Specialized prompt methodology for data analysis, policy research, investigative research, and systematic evidence review.</p></div>
   <div id="seo-skill-domain-agentic"><h3>rootnode-domain-agentic-context</h3><p>Specialized prompt methodology for designing AI agent system prompts, tool definitions, context architectures, and multi-agent coordination.</p></div>
+  <div id="seo-skill-cc-design"><h3>rootnode-cc-design</h3><p>Designs Claude Code environments. Five modes: design (new deployments, CLAUDE.md drafts, agent topology), evolve (updates from friction), research (evaluate CC tools/patterns), template (reusable artifacts), remediate (consume hygiene findings, produce and execute plan).</p></div>
+  <div id="seo-skill-repo-hygiene"><h3>rootnode-repo-hygiene</h3><p>14-category sweep + 7-layer leak check + anti-pattern detection across an existing Claude Code deployment. Produces HYGIENE_REPORT.md consumable by cc-design REMEDIATE mode.</p></div>
+  <div id="seo-skill-project-brief"><h3>rootnode-project-brief</h3><p>Generates a structured Project Brief — extracts goals, architecture, knowledge file inventory, Custom Instructions summary, Memory contents, current state, and key decisions from a Claude Project. Briefs serve as uploadable context for cross-Project work.</p></div>
+  <div id="seo-skill-session-handoff"><h3>rootnode-session-handoff</h3><p>Produces structured XML session continuation documents. Captures active work streams, decisions with rationale, uploaded file content, conversation knowledge, and open items into an ingestion-optimized handoff file.</p></div>
+  <div id="seo-skill-handoff-trigger-check"><h3>rootnode-handoff-trigger-check</h3><p>Evaluates whether work-in-design is ready to hand off from a chat conversation to autonomous execution. Runs a 7-condition gate (spec stability, verification surface, invariants, pump-primer, work decomposition, rollback cost, token budget headroom) and returns a structured JSON verdict.</p></div>
+  <div id="seo-skill-profile-builder"><h3>rootnode-profile-builder</h3><p>Conversational profile builder. Reads a target JSON Schema, conducts a progressive-depth interview, validates answers, and writes the resulting profile. Schema-agnostic — produces validated configs for any Skill that consumes profile-shaped data, including mode-router and critic-gate.</p></div>
+  <div id="seo-skill-critic-gate"><h3>rootnode-critic-gate</h3><p>Profile-driven gate that evaluates work against configured thresholds before merge or handoff. Reads a critic profile produced by profile-builder, applies the gate, returns a structured verdict with rationale.</p></div>
+  <div id="seo-skill-mode-router"><h3>rootnode-mode-router</h3><p>Profile-driven router that reads a mode configuration and routes work by strictness, scope, or context. The runtime counterpart to chat-side block-selection — same selection logic, different surface.</p></div>
 </div>
 
 <!-- SHARED SLIDE-IN PANEL -->
@@ -638,7 +958,7 @@ img, svg { display: block; max-width: 100%; }
 <footer class="footer" role="contentinfo">
   <div class="container"><div class="footer__grid">
     <div class="footer__brand">
-      <svg viewBox="100 90 680 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="#8B929E"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="#8B929E"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="#8B929E"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="#8B929E"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="#8B929E"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="#8B929E"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="#8B929E"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="#8B929E"/></svg>
+      <svg viewBox="136 90 640 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M136 183.6V117.6H148.48V130.2H151.6L147.64 138C147.64 130.88 149.2 125.52 152.32 121.92C155.44 118.24 160.08 116.4 166.24 116.4C173.28 116.4 178.84 118.6 182.92 123C187.08 127.32 189.16 133.28 189.16 140.88V145.32H175.84V141.96C175.84 137.24 174.64 133.64 172.24 131.16C169.92 128.6 166.64 127.32 162.4 127.32C158.16 127.32 154.84 128.6 152.44 131.16C150.12 133.72 148.96 137.32 148.96 141.96V183.6H136Z" fill="#8B929E"/><path d="M231.713 184.68C226.273 184.68 221.553 183.64 217.553 181.56C213.553 179.48 210.473 176.52 208.313 172.68C206.153 168.84 205.073 164.32 205.073 159.12V142.08C205.073 136.8 206.153 132.28 208.313 128.52C210.473 124.68 213.553 121.72 217.553 119.64C221.553 117.56 226.273 116.52 231.713 116.52C237.153 116.52 241.873 117.56 245.873 119.64C249.873 121.72 252.953 124.68 255.113 128.52C257.273 132.28 258.353 136.8 258.353 142.08V159.12C258.353 164.32 257.273 168.84 255.113 172.68C252.953 176.52 249.873 179.48 245.873 181.56C241.873 183.64 237.153 184.68 231.713 184.68ZM231.713 173.28C236.113 173.28 239.513 172.08 241.913 169.68C244.313 167.2 245.513 163.68 245.513 159.12V142.08C245.513 137.44 244.313 133.92 241.913 131.52C239.513 129.12 236.113 127.92 231.713 127.92C227.393 127.92 223.993 129.12 221.513 131.52C219.113 133.92 217.913 137.44 217.913 142.08V159.12C217.913 163.68 219.113 167.2 221.513 169.68C223.993 172.08 227.393 173.28 231.713 173.28Z" fill="#8B929E"/><path d="M303.666 184.68C298.226 184.68 293.506 183.64 289.506 181.56C285.506 179.48 282.426 176.52 280.266 172.68C278.106 168.84 277.026 164.32 277.026 159.12V142.08C277.026 136.8 278.106 132.28 280.266 128.52C282.426 124.68 285.506 121.72 289.506 119.64C293.506 117.56 298.226 116.52 303.666 116.52C309.106 116.52 313.826 117.56 317.826 119.64C321.826 121.72 324.906 124.68 327.066 128.52C329.226 132.28 330.306 136.8 330.306 142.08V159.12C330.306 164.32 329.226 168.84 327.066 172.68C324.906 176.52 321.826 179.48 317.826 181.56C313.826 183.64 309.106 184.68 303.666 184.68ZM303.666 173.28C308.066 173.28 311.466 172.08 313.866 169.68C316.266 167.2 317.466 163.68 317.466 159.12V142.08C317.466 137.44 316.266 133.92 313.866 131.52C311.466 129.12 308.066 127.92 303.666 127.92C299.346 127.92 295.946 129.12 293.466 131.52C291.066 133.92 289.866 137.44 289.866 142.08V159.12C289.866 163.68 291.066 167.2 293.466 169.68C295.946 172.08 299.346 173.28 303.666 173.28Z" fill="#8B929E"/><path d="M382.819 183.6C376.819 183.6 372.139 181.96 368.779 178.68C365.419 175.4 363.739 170.84 363.739 165V129.36H345.499V117.6H363.739V99H376.699V117.6H402.499V129.36H376.699V165C376.699 169.56 378.899 171.84 383.299 171.84H401.299V183.6H382.819Z" fill="#8B929E"/><circle cx="448.76" cy="169.6" r="14" fill="#CC8A0A"/><path d="M495.84 183.6V117.6H508.68V130.2H511.8L508.68 133.2C508.68 127.92 510.24 123.8 513.36 120.84C516.48 117.88 520.8 116.4 526.32 116.4C532.88 116.4 538.12 118.52 542.04 122.76C545.96 126.92 547.92 132.56 547.92 139.68V183.6H534.96V141.12C534.96 136.8 533.8 133.48 531.48 131.16C529.16 128.84 526 127.68 522 127.68C517.92 127.68 514.68 128.92 512.28 131.4C509.96 133.8 508.8 137.32 508.8 141.96V183.6H495.84Z" fill="#8B929E"/><path d="M593.713 184.68C588.273 184.68 583.553 183.64 579.553 181.56C575.553 179.48 572.473 176.52 570.313 172.68C568.153 168.84 567.073 164.32 567.073 159.12V142.08C567.073 136.8 568.153 132.28 570.313 128.52C572.473 124.68 575.553 121.72 579.553 119.64C583.553 117.56 588.273 116.52 593.713 116.52C599.153 116.52 603.873 117.56 607.873 119.64C611.873 121.72 614.953 124.68 617.113 128.52C619.273 132.28 620.353 136.8 620.353 142.08V159.12C620.353 164.32 619.273 168.84 617.113 172.68C614.953 176.52 611.873 179.48 607.873 181.56C603.873 183.64 599.153 184.68 593.713 184.68ZM593.713 173.28C598.113 173.28 601.513 172.08 603.913 169.68C606.313 167.2 607.513 163.68 607.513 159.12V142.08C607.513 137.44 606.313 133.92 603.913 131.52C601.513 129.12 598.113 127.92 593.713 127.92C589.393 127.92 585.993 129.12 583.513 131.52C581.113 133.92 579.913 137.44 579.913 142.08V159.12C579.913 163.68 581.113 167.2 583.513 169.68C585.993 172.08 589.393 173.28 593.713 173.28Z" fill="#8B929E"/><path d="M660.986 184.8C654.346 184.8 649.026 182.56 645.026 178.08C641.026 173.6 639.026 167.56 639.026 159.96V141.36C639.026 133.68 641.026 127.6 645.026 123.12C649.026 118.64 654.346 116.4 660.986 116.4C666.426 116.4 670.746 117.92 673.946 120.96C677.146 123.92 678.746 128 678.746 133.2L675.986 130.2H678.986L678.626 114.84V96H691.586V183.6H678.746V171H675.986L678.746 168C678.746 173.2 677.146 177.32 673.946 180.36C670.746 183.32 666.426 184.8 660.986 184.8ZM665.426 173.52C669.506 173.52 672.706 172.28 675.026 169.8C677.426 167.24 678.626 163.72 678.626 159.24V141.96C678.626 137.48 677.426 134 675.026 131.52C672.706 128.96 669.506 127.68 665.426 127.68C661.186 127.68 657.866 128.92 655.466 131.4C653.066 133.8 651.866 137.32 651.866 141.96V159.24C651.866 163.88 653.066 167.44 655.466 169.92C657.866 172.32 661.186 173.52 665.426 173.52Z" fill="#8B929E"/><path d="M737.619 184.8C732.259 184.8 727.539 183.76 723.459 181.68C719.459 179.52 716.379 176.52 714.219 172.68C712.059 168.84 710.979 164.36 710.979 159.24V141.96C710.979 136.76 712.059 132.28 714.219 128.52C716.379 124.68 719.459 121.72 723.459 119.64C727.539 117.48 732.259 116.4 737.619 116.4C743.059 116.4 747.779 117.48 751.779 119.64C755.779 121.72 758.859 124.68 761.019 128.52C763.179 132.28 764.259 136.76 764.259 141.96V153.72H723.459V159.24C723.459 164.12 724.659 167.84 727.059 170.4C729.539 172.96 733.099 174.24 737.739 174.24C741.499 174.24 744.539 173.6 746.859 172.32C749.179 170.96 750.619 169 751.179 166.44H764.019C763.059 172.04 760.179 176.52 755.379 179.88C750.579 183.16 744.659 184.8 737.619 184.8ZM751.779 145.92V141.84C751.779 137.04 750.579 133.32 748.179 130.68C745.779 128.04 742.259 126.72 737.619 126.72C733.059 126.72 729.539 128.04 727.059 130.68C724.659 133.32 723.459 137.08 723.459 141.96V144.96L752.739 144.84L751.779 145.92Z" fill="#8B929E"/></svg>
       <p class="footer__brand-tagline">The architecture system for Claude</p>
     </div>
     <ul class="footer__links">
@@ -649,80 +969,281 @@ img, svg { display: block; max-width: 100%; }
 </footer>
 
 <script>
-/* ============ LAYER DATA ============ */
+/* ============ PANEL DATA \u2014 layers, skills, bridges, triggers, dual-surface ============ */
 const LAYERS_DATA = {
+
+  /* ====== CROSS-LAYER ====== */
+  "cross-layer": {
+    name: "Cross-Layer",
+    badge: "CROSS-LAYER",
+    badgeClass: "cross",
+    scope: "cross",
+    what: "The only Skill that operates across multiple scopes simultaneously. Detects misalignment between Global setup and Project setup that single-scope audits cannot see.",
+    problem: "Single-scope audits cannot see cross-scope drift. A rule in Custom Instructions might fight a User Preference. A Knowledge File might duplicate something already in Global Memory.",
+    fix: "Runs Project audit + Global audit + Cross-Layer Alignment in a single pass. Detects collisions across scopes and produces a unified action plan ordered by impact.",
+    activates: ["run a full stack audit", "audit my entire Claude setup", "full audit of everything"],
+    connects: ["project-audit", "global-audit"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-full-stack-audit/v3.0"
+  },
+
+  /* ====== GLOBAL SCOPE ====== */
   "user-preferences": {
-    name: "User Preferences", badge: "GLOBAL", badgeClass: "global", scope: "global",
-    what: "Communication style, expertise level, behavioral defaults. Everything here persists across all Projects and all conversations. The foundation layer: what Claude knows about you before any Project loads.",
-    problem: "Preferences are too vague to guide Claude\u2019s behavior. Redundant rules get restated in every Project. Stable patterns stay trapped in Project Memory instead of being promoted globally.",
-    fix: "Evaluates Preference precision, detects redundancies with Project-scoped instructions, and identifies patterns ready for promotion from Project Memory.",
-    activates: ["\u201Coptimize my preferences\u201D", "\u201Care my preferences working?\u201D"],
+    name: "User Preferences",
+    badge: "GLOBAL",
+    badgeClass: "global",
+    scope: "global",
+    what: "Communication style, expertise level, behavioral defaults. The most foundational layer \u2014 persists across every Project and shapes every conversation in your Claude environment.",
+    problem: "Preferences too vague to guide behavior. Stable patterns trapped in Project Memory instead of promoted globally. Redundant rules restated in every Project.",
+    fix: "Reviews stated preferences against observed behavior across Projects. Flags vague directives, missing critical preferences, or directives that cascade poorly into all Projects.",
+    activates: ["optimize my preferences", "are my preferences working?"],
     connects: ["Styles", "Global Memory"]
   },
   "styles": {
-    name: "Styles", badge: "GLOBAL", badgeClass: "global", scope: "global",
-    what: "Tone, format, and delivery patterns. Applied by selection and can be switched per conversation. Controls how Claude communicates, separate from what it knows or how it reasons.",
-    problem: "Style settings conflict with formatting rules hardcoded in Custom Instructions. Tone preferences get scattered across Projects instead of centralized.",
-    fix: "Detects tension between Style settings and Custom Instructions formatting. Identifies when delivery preferences belong in a Style rather than being hardcoded per Project.",
-    activates: ["\u201CClaude\u2019s tone is off\u201D", "\u201Cformatting is inconsistent\u201D"],
+    name: "Styles",
+    badge: "GLOBAL",
+    badgeClass: "global",
+    scope: "global",
+    what: "Tone, format, and delivery patterns. Selected per conversation. Affects how Claude communicates \u2014 voice, structure, length, formatting choices.",
+    problem: "Multiple Styles configured globally with mismatched activation rules produce unpredictable behavior. Tone preferences scattered across Projects instead of centralized.",
+    fix: "Identifies competing or misconfigured Styles, ambiguous Style descriptions, and Styles that fight User Preferences.",
+    activates: ["Claude's tone is off", "formatting is inconsistent"],
     connects: ["User Preferences", "Custom Instructions"]
   },
   "global-memory": {
-    name: "Global Memory", badge: "GLOBAL", badgeClass: "global", scope: "global",
-    what: "Cross-project context and learned preferences. Auto-synthesized from conversations. Orientation facts that help Claude understand who you are and what matters to you, loaded into every conversation.",
-    problem: "Memory accumulates stale facts, redundant entries, and reference-depth content that belongs in knowledge files. Bloated Memory consumes context budget across every conversation.",
-    fix: "Audits for redundancy and staleness. Rebalances content between Memory, Preferences, and knowledge files. Tracks Memory\u2019s contribution to context overhead.",
-    activates: ["\u201Cpreferences vs global memory analysis\u201D", "\u201Cwhat should be in global memory?\u201D"],
+    name: "Global Memory",
+    badge: "GLOBAL",
+    badgeClass: "global",
+    scope: "global",
+    what: "Shared knowledge that travels with you across all Projects. Health is critical \u2014 stale or oversized memories cascade into every conversation.",
+    problem: "Memory drift is one of the most common causes of unpredictable behavior across Projects. Bloated Memory consumes context budget everywhere.",
+    fix: "Reviews entries for staleness, redundancy, and alignment with current usage patterns. Recommends consolidation, removal, or restructuring across Memory layers.",
+    activates: ["preferences vs global memory analysis", "what should be in global memory?"],
     connects: ["User Preferences", "Project Memory"]
   },
-  "skills-layer": {
-    name: "Skills", badge: "GLOBAL", badgeClass: "global", scope: "global",
-    what: "Procedural knowledge packaged in SKILL.md files. Activated automatically by task relevance. Skills use progressive disclosure: a lightweight description loads at startup, the full methodology loads on demand.",
-    problem: "Installed Skills collide with Project knowledge files covering the same territory. The Skill portfolio has gaps that force manual workarounds. Overhead from unused Skills consumes context budget.",
-    fix: "Evaluates Skill portfolio fitness, detects collisions with knowledge files, and converts design specs into deployment-ready Skill packages.",
-    activates: ["\u201Cbuild this Skill\u201D", "\u201Cconvert this to a Skill\u201D"],
+  "skills": {
+    name: "Skills",
+    badge: "GLOBAL",
+    badgeClass: "global",
+    scope: "global",
+    what: "Procedural knowledge in SKILL.md files. Activated by task relevance. Each Skill is configured globally and made available across all Projects.",
+    problem: "Skills can overlap, conflict, or sit unused \u2014 any of which weakens activation and trust. Overhead from unused Skills consumes context budget.",
+    fix: "Reviews coverage and conflict; identifies overlap between Skills and Skills that never activate. skill-builder designs and builds new Skills.",
+    activates: ["build this Skill", "convert this to a Skill"],
     connects: ["MCP Connectors", "Custom Instructions"]
   },
-  "mcp-connectors": {
-    name: "MCP Connectors", badge: "GLOBAL", badgeClass: "global", scope: "global",
-    what: "External service integrations like Gmail, Slack, Google Drive, and Notion. Tools loaded on demand through deferred loading: configured once, available everywhere.",
-    problem: "Projects assume connector capabilities that aren\u2019t configured. Connector overhead goes untracked. Alignment between available connectors and Project needs drifts as Projects evolve.",
-    fix: "Checks connector alignment with Project needs, detects assumed capabilities without configured connectors, and accounts for connector overhead.",
-    activates: ["\u201Cwhich integrations do I need\u201D", "\u201Ccheck my connector setup\u201D"],
+  "mcp": {
+    name: "MCP Connectors",
+    badge: "GLOBAL",
+    badgeClass: "global",
+    scope: "global",
+    what: "External service integrations. Tools loaded on demand. Configured globally; activated per-Project as needed.",
+    problem: "MCP misconfiguration produces silent tool failures \u2014 users see Claude refuse to act without knowing why. Connector overhead goes untracked.",
+    fix: "Audits Connector configuration; identifies misconfigured, unused, or conflicting Connectors.",
+    activates: ["which integrations do I need", "check my connector setup"],
     connects: ["Skills", "Knowledge Files"]
   },
+
+  /* ====== PROJECT SCOPE ====== */
   "project-memory": {
-    name: "Project Memory", badge: "PROJECT", badgeClass: "project", scope: "project",
-    what: "Phase awareness, active constraints, key decisions. Auto-synthesized per Project. The orientation layer that helps Claude pick up where you left off: what you\u2019re working on, what was decided, what\u2019s next.",
-    problem: "Memory fills with outdated decisions, redundant orientation facts, and content that belongs in Preferences or knowledge files. Claude\u2019s per-conversation orientation degrades as Memory becomes noisy.",
-    fix: "Audits for redundancy and staleness, identifies content ready for promotion or demotion, and produces specific edit prescriptions with human-in-the-loop confirmation.",
-    activates: ["\u201Coptimize my memory\u201D", "\u201Cwhat belongs in memory?\u201D", "\u201Crebalance my project memory\u201D"],
+    name: "Project Memory",
+    badge: "PROJECT",
+    badgeClass: "project",
+    scope: "project",
+    what: "Phase awareness, active constraints, key decisions. Tracks where you are, what is locked, and what was decided in the current Project.",
+    problem: "Stale phase markers and abandoned constraints create persistent confusion. Memory bloats as work proceeds \u2014 uncurated entries crowd out current context.",
+    fix: "Reviews Memory health; identifies outdated phase markers, abandoned constraints, undocumented decisions. Cleans stale or redundant entries.",
+    activates: ["optimize my memory", "rebalance my project memory"],
     connects: ["Global Memory", "Custom Instructions"]
   },
   "custom-instructions": {
-    name: "Custom Instructions", badge: "PROJECT \u2014 ALWAYS-LOADED", badgeClass: "project", scope: "project",
-    what: "The behavioral architecture of your Project. Identity, rules, routing, output standards. Everything here loads into every conversation, every time. This is the highest-leverage layer: the right instructions here shape every response Claude produces.",
-    problem: "Instructions that work individually conflict with each other silently. Rules meant for knowledge files bloat the always-loaded context. Behavioral calibration is guesswork. Seven structural anti-patterns hide in plain sight.",
-    fix: "Builds Custom Instructions using the 5-layer prompt architecture (Identity, Objective, Context, Reasoning, Output + Quality Control). Scores instruction clarity across six dimensions. Detects anti-patterns and provides tested countermeasures for Claude\u2019s eight behavioral tendencies.",
-    activates: ["\u201Caudit my custom instructions\u201D", "\u201Cbuild custom instructions for my project\u201D"],
+    name: "Custom Instructions",
+    badge: "PROJECT \u2014 ALWAYS-LOADED",
+    badgeClass: "project",
+    scope: "project",
+    what: "Always-loaded behavioral architecture. The highest-leverage Project layer \u2014 every conversation runs through these, so design quality here cascades into everything.",
+    problem: "Custom Instructions issues are the single largest source of Project-level quality problems. Vague directives, missing edge cases, instructions that fight each other.",
+    fix: "Audits for clarity, completeness, conflicts. Tunes for specific behavioral patterns. Compiles structured CIs from raw inputs. Validates before deployment.",
+    activates: ["audit my custom instructions", "build custom instructions for my project"],
     connects: ["Knowledge Files", "Project Memory"]
   },
   "knowledge-files": {
-    name: "Knowledge Files", badge: "PROJECT \u2014 ON-DEMAND", badgeClass: "project", scope: "project",
-    what: "Searchable reference depth. Documentation, data, and frameworks loaded on demand when a query matches their content. In retrieval mode (~66,500+ tokens), Claude searches rather than loading everything. How files are structured directly affects what gets found.",
-    problem: "Files structured for human reading fail Claude\u2019s retrieval patterns. Orphaned files go unreferenced. Context budget gets consumed by content that belongs in other layers. In retrieval mode, poorly structured files mean Claude can\u2019t find what it needs.",
-    fix: "Runs full budget analysis with per-file evaluation, content routing, growth trajectory, and retrieval quality audit. Detects orphaned files and content misplacement. Designs knowledge file architecture during Project scaffolding.",
-    activates: ["\u201Coptimize my knowledge files\u201D", "\u201Cis my project too big?\u201D"],
+    name: "Knowledge Files",
+    badge: "PROJECT \u2014 ON-DEMAND",
+    badgeClass: "project",
+    scope: "project",
+    what: "Searchable reference depth. Where Project documents, frameworks, and reference materials live. Activated when retrieval matches.",
+    problem: "Disorganized Knowledge Files weaken retrieval. Files structured for human reading fail Claude's retrieval patterns. Orphaned files go unreferenced.",
+    fix: "Audits for organization, redundancy, and retrieval health. Per-file evaluation, content routing, retrieval quality audit, phased optimization.",
+    activates: ["optimize my knowledge files", "is my project too big?"],
     connects: ["Custom Instructions", "MCP Connectors"]
   },
+
+  /* ====== CONVERSATION SCOPE ====== */
   "conversation-context": {
-    name: "Conversation Context", badge: "CONVERSATION", badgeClass: "conversation", scope: "conversation",
-    what: "Messages, uploads, tool results. Where architecture meets execution. This is the layer where you interact with the Project and where Skills activate through natural language.",
-    problem: "If the layers above are misconfigured, conversation quality suffers in ways that look like Claude\u2019s fault but are actually structural. Output drift, ignored instructions, and degraded quality over long conversations are symptoms of architectural problems, not conversation problems.",
-    fix: "Skills activate through this layer automatically. Keywords and task descriptions trigger the right diagnostic and compilation tools without requiring explicit commands. The architecture is designed so that natural conversation about your Project\u2019s problems surfaces the right tools.",
+    name: "Conversation Context",
+    badge: "CONVERSATION",
+    badgeClass: "conversation",
+    scope: "conversation",
+    what: "The current exchange. Where you interact with the Project. Two Skill categories activate here in the background \u2014 block libraries (4 Skills) and domain packs (5 Skills) \u2014 contributing structure, identity, reasoning frames, output formats, and domain expertise as needed.",
+    problem: "If the layers above are misconfigured, conversation quality suffers in ways that look like Claude's fault but are structural. Output drift, ignored instructions, and degraded quality over long conversations are symptoms of architectural problems.",
+    fix: "Skills activate through this layer automatically. Keywords and task descriptions trigger the right diagnostic and compilation tools without requiring explicit commands.",
     activates: [],
     connects: ["All layers above"]
+  },
+
+  /* ====== BRIDGES (chat-Projects, cross-conversation) ====== */
+  "project-brief": {
+    name: "rootnode-project-brief",
+    badge: "BRIDGE \u00B7 CHAT-PROJECTS",
+    badgeClass: "conversation",
+    scope: "conversation",
+    what: "Captures the current Project context as a portable artifact for use elsewhere. Connects Projects across the chat-side ecosystem \u2014 work in one Project can inform another without manual reconstruction.",
+    fix: "Generates a structured Project Brief: goals, architecture, knowledge file inventory, Custom Instructions summary, Memory contents, current state, and key decisions \u2014 uploadable into another Project.",
+    activates: ["capture this Project's context", "build a brief for another Project"],
+    connects: ["session-handoff"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-project-brief/v3.0"
+  },
+  "session-handoff": {
+    name: "rootnode-session-handoff",
+    badge: "BRIDGE \u00B7 CHAT-PROJECTS",
+    badgeClass: "conversation",
+    scope: "conversation",
+    what: "Preserves work state across separate conversations. The receiving conversation can resume where the sender left off without losing nuance or context.",
+    fix: "Produces structured XML session continuation documents: active work streams, decisions with rationale, uploaded file content, conversation knowledge, open items, and a starter prompt.",
+    activates: ["wrap up this session", "build a handoff for the next conversation"],
+    connects: ["project-brief"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-session-handoff/v3.0"
+  },
+
+  /* ====== HANDOFF TRIGGERS (chat \u2192 Claude Code) ====== */
+  "handoff-trigger-check": {
+    name: "rootnode-handoff-trigger-check",
+    badge: "TRIGGER \u00B7 CHAT \u2192 CODE",
+    badgeClass: "cc",
+    scope: "cc",
+    what: "Helps design the handoff points to Claude Code. During a conversation, indicates when a Project is ready to hand off work to autonomous execution \u2014 and when it is not.",
+    fix: "Walks a 7-condition gate (spec stability, verification surface, invariants, pump-primer, work decomposition, rollback cost, token budget) and returns a structured verdict with what's missing.",
+    activates: ["are we ready to hand this off to Claude Code?", "is this ready for autonomous execution?"],
+    connects: ["profile-builder"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-handoff-trigger-check/v3.0"
+  },
+  "profile-builder": {
+    name: "rootnode-profile-builder",
+    badge: "TRIGGER \u00B7 CHAT \u2192 CODE",
+    badgeClass: "cc",
+    scope: "cc",
+    what: "Builds configuration profiles that Claude Code consumes during execution. Output flows directly into mode-router, which reads the profile at runtime to determine which modes apply, how strict gates should be, and what context is allowed.",
+    fix: "Conducts a progressive-depth interview against a target JSON Schema, validates answers, and writes the resulting profile. Schema-agnostic \u2014 produces validated configs for any Skill that consumes profile-shaped data.",
+    activates: ["set up a critic profile for this repo", "build a configuration profile"],
+    connects: ["mode-router", "critic-gate"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-profile-builder/v3.0"
+  },
+
+  /* ====== CLAUDE CODE SCOPE ====== */
+  "cc-global-user-settings": {
+    name: "Global User Settings",
+    badge: "CLAUDE CODE",
+    badgeClass: "cc",
+    scope: "cc",
+    what: "The ~/.claude/ directory containing personal settings, MCP servers, and user-installed Skills available across all repos. Where dual-surface Skills live on the Claude Code side.",
+    problem: "Drift between user-level settings and repo-level expectations leads to inconsistent execution across repos.",
+    fix: "cc-design installs at the user level \u2014 available to act on any Claude Code repo without per-repo reinstallation.",
+    activates: ["design my Claude Code setup"],
+    connects: ["cc-design"]
+  },
+  "cc-repo": {
+    name: "Repo",
+    badge: "CLAUDE CODE",
+    badgeClass: "cc",
+    scope: "cc",
+    what: "The repo's .claude/ directory containing repo-specific rules, agent definitions, hooks, and policies. The execution layer \u2014 where autonomous work happens against the codebase. Reads configuration profiles produced upstream by profile-builder.",
+    problem: "Claude Code repos drift over time \u2014 patterns calcify, anti-patterns accumulate. Risky changes need a gate before they hit the repo, not after.",
+    fix: "critic-gate pre-commit safety review. mode-router profile-driven routing per file class. repo-hygiene 14-category sweep + 7-layer leak check.",
+    activates: ["audit this Claude Code repo", "run a hygiene check"],
+    connects: ["critic-gate", "mode-router", "repo-hygiene"]
+  },
+
+  /* ====== CC RUNTIME SKILLS ====== */
+  "critic-gate": {
+    name: "rootnode-critic-gate",
+    badge: "SKILL \u00B7 CLAUDE CODE",
+    badgeClass: "cc",
+    scope: "cc",
+    what: "Profile-driven gate that evaluates work against configured thresholds before merge or handoff. Reads a critic profile produced by profile-builder, applies the gate, returns a structured verdict with rationale.",
+    fix: "Identifies changes that exceed the active profile's risk threshold; blocks them or routes them for review.",
+    activates: ["gate this change", "review before merge"],
+    connects: ["profile-builder", "mode-router"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-critic-gate/v3.0"
+  },
+  "mode-router": {
+    name: "rootnode-mode-router",
+    badge: "SKILL \u00B7 CLAUDE CODE",
+    badgeClass: "cc",
+    scope: "cc",
+    what: "Profile-driven router that reads a mode configuration and routes work by strictness, scope, or context. The runtime counterpart to chat-side block-selection \u2014 same selection logic, different surface.",
+    fix: "Reads the active profile (produced by profile-builder) and routes incoming requests to the matching mode \u2014 different strictness per file class.",
+    activates: ["route this work", "which mode applies"],
+    connects: ["profile-builder", "critic-gate"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-mode-router/v3.0"
+  },
+  "repo-hygiene": {
+    name: "rootnode-repo-hygiene",
+    badge: "SKILL \u00B7 CLAUDE CODE",
+    badgeClass: "cc",
+    scope: "cc",
+    what: "14-category sweep + 7-layer leak check + anti-pattern detection across an existing Claude Code deployment.",
+    fix: "Two-phase sweep: Phase 1 audits the repo and produces HYGIENE_REPORT.md consumable by cc-design REMEDIATE. Phase 2 executes user-approved findings with verification.",
+    activates: ["audit this Claude Code repo", "run a hygiene check"],
+    connects: ["cc-design"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-repo-hygiene/v3.0"
+  },
+
+  /* ====== DUAL-SURFACE SKILLS ====== */
+  "skill-builder": {
+    name: "rootnode-skill-builder \u21C4",
+    badge: "DUAL-SURFACE",
+    badgeClass: "skill",
+    scope: "cross",
+    what: "Builds, validates, packages, tests, and optimizes deployment-ready Skills. Six workflows: build, iterate, optimize, compare, review, revise.",
+    fix: "Converts a design spec into SKILL.md + references/ + scripts/ + agents/. Runs three pre-build gates, the 9-dimension quality gate, behavioral iteration, and description optimization.",
+    activates: ["build this Skill", "review my Skill", "optimize the description"],
+    connects: ["prompt-compilation", "cc-design"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/skill-builder/v3.0"
+  },
+  "cc-design": {
+    name: "rootnode-cc-design \u21C4",
+    badge: "DUAL-SURFACE",
+    badgeClass: "skill",
+    scope: "cross",
+    what: "Designs Claude Code environments. Five modes: design (new deployments), evolve (updates from friction), research (evaluate CC tools/patterns), template (reusable artifacts), remediate (consume hygiene findings \u2192 produce + execute plan).",
+    fix: "Produces deployment plans, design deltas, research assessments, reusable templates, or executable remediation plans. REMEDIATE is the only mode that also executes.",
+    activates: ["design CC for X", "build a CC prompt", "remediate the hygiene findings"],
+    connects: ["repo-hygiene", "skill-builder"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/cc-design/v3.0"
+  },
+
+  /* ====== CONVERSATION CATEGORIES (pill targets) ====== */
+  "blocks": {
+    name: "blocks (4 Skills)",
+    badge: "CONVERSATION \u00B7 BLOCK LIBRARIES",
+    badgeClass: "conversation",
+    scope: "conversation",
+    what: "Reusable prompt building blocks. block-selection chooses which blocks to use; identity-blocks, reasoning-blocks, output-blocks are the libraries themselves. Activate automatically when Core Skills need them.",
+    activates: ["help me pick the right reasoning approach", "what identity fits this task"],
+    connects: ["block-selection", "identity-blocks", "reasoning-blocks", "output-blocks"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills#block-libraries"
+  },
+  "domain-packs": {
+    name: "domain-packs (5 Skills)",
+    badge: "CONVERSATION \u00B7 DOMAIN PACKS",
+    badgeClass: "conversation",
+    scope: "conversation",
+    what: "Domain-specific expertise. Each pack provides knowledge and behavior tuned to a specialized field: business-strategy, software-engineering, content-communications, research-analysis, agentic-context. One activates per matched domain.",
+    activates: ["M&A analysis", "code review prompt", "research prompt"],
+    connects: ["domain-business-strategy", "domain-software-engineering", "domain-content-communications", "domain-research-analysis", "domain-agentic-context"],
+    releaseUrl: "https://github.com/drayline/rootnode-skills#domain-packs"
   }
+
 };
 
 /* ============ SKILLS DATA (19 Skills, 5 groups) ============ */
@@ -730,45 +1251,45 @@ const SKILLS_DATA = {
   diagnose: {
     label: "Core \u2014 Diagnose",
     skills: [
-      { id: "project-audit", name: "rootnode-project-audit", desc: "Scores Claude Projects on six dimensions using anchored 1\u20135 rubrics. Now includes global layer awareness. Quick Audit gains Global Layer Notes. Full Audit gains Cross-Layer Alignment section. Reconstruct avoids duplicating Preferences and accounts for installed Skills.", keywords: ["audit my project", "score my project", "audit my custom instructions", "why is my project underperforming", "evaluate my Claude project"], composes: ["global-audit", "anti-pattern-detection", "behavioral-tuning", "memory-optimization"] },
-      { id: "global-audit", name: "rootnode-global-audit", desc: "Audits all five global layers (Preferences, Styles, Memory, Skills, Connectors) using a six-dimension scorecard. Detects eight cross-layer failure modes and produces evolutionary recommendations.", keywords: ["audit my global setup", "optimize my preferences", "review my Claude configuration", "check my cross-project setup"], composes: ["full-stack-audit", "memory-optimization"] },
-      { id: "full-stack-audit", name: "rootnode-full-stack-audit", desc: "Combines Project audit + Global audit + Cross-Layer Alignment into a single comprehensive evaluation. Produces a unified action plan across all nine layers.", keywords: ["run a full stack audit", "audit my entire Claude setup", "full audit of everything"], composes: ["project-audit", "global-audit"] },
-      { id: "anti-pattern-detection", name: "rootnode-anti-pattern-detection", desc: "Detects seven structural patterns that cause ignored instructions and degraded output. Every finding quotes the specific text causing the problem.", keywords: ["what's wrong with my project", "Claude ignores my instructions", "diagnose my project", "why is output inconsistent"], composes: ["project-audit", "behavioral-tuning"] },
-      { id: "prompt-validation", name: "rootnode-prompt-validation", desc: "Six-dimension Prompt Scorecard for evaluating existing prompts. Includes a symptom-to-fix diagnostic map that connects observed problems to specific structural causes.", keywords: ["review my prompt", "score this prompt", "why isn't my prompt working", "what's wrong with my prompt", "improve my prompt"], composes: ["prompt-compilation"] }
+      { id: "project-audit", name: "rootnode-project-audit", desc: "Scores Claude Projects on six dimensions using anchored 1\u20135 rubrics. Now includes global layer awareness. Quick Audit gains Global Layer Notes. Full Audit gains Cross-Layer Alignment section. Reconstruct avoids duplicating Preferences and accounts for installed Skills.", keywords: ["audit my project", "score my project", "audit my custom instructions", "why is my project underperforming", "evaluate my Claude project"], composes: ["global-audit", "anti-pattern-detection", "behavioral-tuning", "memory-optimization"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-project-audit/v3.0" },
+      { id: "global-audit", name: "rootnode-global-audit", desc: "Audits all five global layers (Preferences, Styles, Memory, Skills, Connectors) using a six-dimension scorecard. Detects eight cross-layer failure modes and produces evolutionary recommendations.", keywords: ["audit my global setup", "optimize my preferences", "review my Claude configuration", "check my cross-project setup"], composes: ["full-stack-audit", "memory-optimization"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-global-audit/v3.0" },
+      { id: "full-stack-audit", name: "rootnode-full-stack-audit", desc: "Combines Project audit + Global audit + Cross-Layer Alignment into a single comprehensive evaluation. Produces a unified action plan across all nine layers.", keywords: ["run a full stack audit", "audit my entire Claude setup", "full audit of everything"], composes: ["project-audit", "global-audit"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-full-stack-audit/v3.0" },
+      { id: "anti-pattern-detection", name: "rootnode-anti-pattern-detection", desc: "Detects seven structural patterns that cause ignored instructions and degraded output. Every finding quotes the specific text causing the problem.", keywords: ["what's wrong with my project", "Claude ignores my instructions", "diagnose my project", "why is output inconsistent"], composes: ["project-audit", "behavioral-tuning"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-anti-pattern-detection/v3.0" },
+      { id: "prompt-validation", name: "rootnode-prompt-validation", desc: "Six-dimension Prompt Scorecard for evaluating existing prompts. Includes a symptom-to-fix diagnostic map that connects observed problems to specific structural causes.", keywords: ["review my prompt", "score this prompt", "why isn't my prompt working", "what's wrong with my prompt", "improve my prompt"], composes: ["prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-prompt-validation/v3.0" }
     ]
   },
   build: {
     label: "Core \u2014 Build",
     skills: [
-      { id: "prompt-compilation", name: "rootnode-prompt-compilation", desc: "Four-stage methodology for building Claude prompts and Project scaffolds: Parse, Select, Construct, Validate. Project Mode now has global layer awareness. Parse/Select/Validate updated. Project Mode output includes a Global Layer Advisory.", keywords: ["build me a prompt", "scaffold a Claude Project", "build custom instructions for my project", "design a prompt for"], composes: ["block-selection", "prompt-validation"] },
-      { id: "skill-builder", name: "rootnode-skill-builder", desc: "Converts design specifications into deployment-ready Skill packages (SKILL.md + references/). Carries the full Skills spec, conversion rules, progressive disclosure patterns, and quality gate.", keywords: ["build this Skill", "convert this to a Skill", "build from this design spec"], composes: ["prompt-compilation"] }
+      { id: "prompt-compilation", name: "rootnode-prompt-compilation", desc: "Four-stage methodology for building Claude prompts and Project scaffolds: Parse, Select, Construct, Validate. Project Mode now has global layer awareness. Parse/Select/Validate updated. Project Mode output includes a Global Layer Advisory.", keywords: ["build me a prompt", "scaffold a Claude Project", "build custom instructions for my project", "design a prompt for"], composes: ["block-selection", "prompt-validation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-prompt-compilation/v3.0" },
+      { id: "skill-builder", name: "rootnode-skill-builder", desc: "Converts design specifications into deployment-ready Skill packages (SKILL.md + references/). Carries the full Skills spec, conversion rules, progressive disclosure patterns, and quality gate.", keywords: ["build this Skill", "convert this to a Skill", "build from this design spec"], composes: ["prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/skill-builder/v3.0" }
     ]
   },
   optimize: {
     label: "Core \u2014 Optimize",
     skills: [
-      { id: "behavioral-tuning", name: "rootnode-behavioral-tuning", desc: "Diagnoses eight Claude behavioral tendencies (verbosity, hedging, list overuse, agreeableness bias, and others) with countermeasure templates ready to paste into system prompts.", keywords: ["Claude is too verbose", "Claude keeps hedging", "Claude agrees with everything", "make Claude more direct", "tune Claude's behavior"], composes: ["project-audit", "anti-pattern-detection"] },
-      { id: "memory-optimization", name: "rootnode-memory-optimization", desc: "Rebalances context across Memory, Custom Instructions, knowledge files, and User Preferences. Now includes the Codification pathway (Memory \u2192 Preferences/CI). Adds the Stability Test and Universality Test for determining the right destination.", keywords: ["optimize my memory", "what belongs in memory?", "rebalance my project memory", "preferences vs memory"], composes: ["project-audit", "context-budget"] },
-      { id: "context-budget", name: "rootnode-context-budget", desc: "Full context budget analysis: two-pool architecture (~66,500 token RAG threshold), per-file evaluation across six dimensions, content routing by category, growth trajectory, retrieval quality audit, and phased optimization with compression safeguards.", keywords: ["run a context budget analysis", "is my project too big?", "optimize my knowledge files", "check my context budget"], composes: ["project-audit", "memory-optimization"] }
+      { id: "behavioral-tuning", name: "rootnode-behavioral-tuning", desc: "Diagnoses eight Claude behavioral tendencies (verbosity, hedging, list overuse, agreeableness bias, and others) with countermeasure templates ready to paste into system prompts.", keywords: ["Claude is too verbose", "Claude keeps hedging", "Claude agrees with everything", "make Claude more direct", "tune Claude's behavior"], composes: ["project-audit", "anti-pattern-detection"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-behavioral-tuning/v3.0" },
+      { id: "memory-optimization", name: "rootnode-memory-optimization", desc: "Rebalances context across Memory, Custom Instructions, knowledge files, and User Preferences. Now includes the Codification pathway (Memory \u2192 Preferences/CI). Adds the Stability Test and Universality Test for determining the right destination.", keywords: ["optimize my memory", "what belongs in memory?", "rebalance my project memory", "preferences vs memory"], composes: ["project-audit", "context-budget"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-memory-optimization/v3.0" },
+      { id: "context-budget", name: "rootnode-context-budget", desc: "Full context budget analysis: two-pool architecture (~66,500 token RAG threshold), per-file evaluation across six dimensions, content routing by category, growth trajectory, retrieval quality audit, and phased optimization with compression safeguards.", keywords: ["run a context budget analysis", "is my project too big?", "optimize my knowledge files", "check my context budget"], composes: ["project-audit", "memory-optimization"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-context-budget/v3.0" }
     ]
   },
   blocks: {
     label: "Supporting \u2014 Block Libraries",
     skills: [
-      { id: "block-selection", name: "rootnode-block-selection", desc: "Decision-tree logic across 8 identity, 18 reasoning, and 10 output options. Maps task characteristics to the right approaches from the tested library.", keywords: ["what approach should I use", "which reasoning method", "what identity fits this task", "help me pick the right approach"], composes: ["prompt-compilation", "identity-blocks", "reasoning-blocks", "output-blocks"] },
-      { id: "identity-blocks", name: "rootnode-identity-blocks", desc: "Eight tested identity approaches (Strategic Advisor, Technical Architect, Research Synthesist, and others) with complete XML templates, selection guidance, and a custom identity builder.", keywords: ["what role should Claude play", "identity for my prompt", "persona for this task", "build a custom role"], composes: ["block-selection", "prompt-compilation"] },
-      { id: "reasoning-blocks", name: "rootnode-reasoning-blocks", desc: "Eighteen reasoning variants across six categories (Analytical, Strategic, Creative, Technical, Research, Comparative) with complete XML specifications.", keywords: ["what reasoning approach", "how should Claude analyze this", "which thinking method fits", "recommend a reasoning pattern"], composes: ["block-selection", "prompt-compilation"] },
-      { id: "output-blocks", name: "rootnode-output-blocks", desc: "Ten output format specifications (Executive Brief, Technical Design Document, Decision Matrix, and others) with section-by-section length guidance and format constraints.", keywords: ["how should I structure this", "what format for a board update", "format for a technical RFC", "help me design an output format"], composes: ["block-selection", "prompt-compilation"] }
+      { id: "block-selection", name: "rootnode-block-selection", desc: "Decision-tree logic across 8 identity, 18 reasoning, and 10 output options. Maps task characteristics to the right approaches from the tested library.", keywords: ["what approach should I use", "which reasoning method", "what identity fits this task", "help me pick the right approach"], composes: ["prompt-compilation", "identity-blocks", "reasoning-blocks", "output-blocks"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-block-selection/v3.0" },
+      { id: "identity-blocks", name: "rootnode-identity-blocks", desc: "Eight tested identity approaches (Strategic Advisor, Technical Architect, Research Synthesist, and others) with complete XML templates, selection guidance, and a custom identity builder.", keywords: ["what role should Claude play", "identity for my prompt", "persona for this task", "build a custom role"], composes: ["block-selection", "prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-identity-blocks/v3.0" },
+      { id: "reasoning-blocks", name: "rootnode-reasoning-blocks", desc: "Eighteen reasoning variants across six categories (Analytical, Strategic, Creative, Technical, Research, Comparative) with complete XML specifications.", keywords: ["what reasoning approach", "how should Claude analyze this", "which thinking method fits", "recommend a reasoning pattern"], composes: ["block-selection", "prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-reasoning-blocks/v3.0" },
+      { id: "output-blocks", name: "rootnode-output-blocks", desc: "Ten output format specifications (Executive Brief, Technical Design Document, Decision Matrix, and others) with section-by-section length guidance and format constraints.", keywords: ["how should I structure this", "what format for a board update", "format for a technical RFC", "help me design an output format"], composes: ["block-selection", "prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-output-blocks/v3.0" }
     ]
   },
   domains: {
     label: "Supporting \u2014 Domain Packs",
     skills: [
-      { id: "domain-business-strategy", name: "rootnode-domain-business-strategy", desc: "Specialized prompt methodology for consulting, M&A, corporate strategy, and strategic planning. 11 tested approaches (3 identity, 4 reasoning, 4 output formats).", keywords: ["M&A analysis", "due diligence prompt", "board narrative", "investment case", "market entry strategy"], composes: ["prompt-compilation"] },
-      { id: "domain-software-engineering", name: "rootnode-domain-software-engineering", desc: "Specialized prompt methodology for system design, code review, incident response, security analysis, API design. 11 tested approaches.", keywords: ["code review prompt", "system design prompt", "security review prompt", "API design prompt", "RFC prompt"], composes: ["prompt-compilation"] },
-      { id: "domain-content-communications", name: "rootnode-domain-content-communications", desc: "Specialized prompt methodology for writing, editing, content strategy, copywriting, audience analysis, and messaging frameworks. 11 tested approaches.", keywords: ["prompt for writing", "content strategy", "prompt for copywriting", "prompt for blog posts"], composes: ["prompt-compilation"] },
-      { id: "domain-research-analysis", name: "rootnode-domain-research-analysis", desc: "Specialized prompt methodology for data analysis, policy research, investigative research, and systematic evidence review. 11 tested approaches.", keywords: ["data analysis prompt", "research prompt", "policy brief prompt", "literature review prompt"], composes: ["prompt-compilation"] },
-      { id: "domain-agentic-context", name: "rootnode-domain-agentic-context", desc: "Specialized prompt methodology for designing AI agent system prompts, tool definitions, context architectures, multi-agent coordination, and agent evaluation. 12 tested approaches.", keywords: ["design an agent", "agent system prompt", "context window architecture", "tool interface design"], composes: ["prompt-compilation"] }
+      { id: "domain-business-strategy", name: "rootnode-domain-business-strategy", desc: "Specialized prompt methodology for consulting, M&A, corporate strategy, and strategic planning. 11 tested approaches (3 identity, 4 reasoning, 4 output formats).", keywords: ["M&A analysis", "due diligence prompt", "board narrative", "investment case", "market entry strategy"], composes: ["prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-domain-business-strategy/v3.0" },
+      { id: "domain-software-engineering", name: "rootnode-domain-software-engineering", desc: "Specialized prompt methodology for system design, code review, incident response, security analysis, API design. 11 tested approaches.", keywords: ["code review prompt", "system design prompt", "security review prompt", "API design prompt", "RFC prompt"], composes: ["prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-domain-software-engineering/v3.0" },
+      { id: "domain-content-communications", name: "rootnode-domain-content-communications", desc: "Specialized prompt methodology for writing, editing, content strategy, copywriting, audience analysis, and messaging frameworks. 11 tested approaches.", keywords: ["prompt for writing", "content strategy", "prompt for copywriting", "prompt for blog posts"], composes: ["prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-domain-content-communications/v3.0" },
+      { id: "domain-research-analysis", name: "rootnode-domain-research-analysis", desc: "Specialized prompt methodology for data analysis, policy research, investigative research, and systematic evidence review. 11 tested approaches.", keywords: ["data analysis prompt", "research prompt", "policy brief prompt", "literature review prompt"], composes: ["prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-domain-research-analysis/v3.0" },
+      { id: "domain-agentic-context", name: "rootnode-domain-agentic-context", desc: "Specialized prompt methodology for designing AI agent system prompts, tool definitions, context architectures, multi-agent coordination, and agent evaluation. 12 tested approaches.", keywords: ["design an agent", "agent system prompt", "context window architecture", "tool interface design"], composes: ["prompt-compilation"], releaseUrl: "https://github.com/drayline/rootnode-skills/releases/tag/rootnode-domain-agentic-context/v3.0" }
     ]
   }
 };
@@ -782,9 +1303,12 @@ const panelContent = document.getElementById("panelContent");
 let activeEl = null;
 
 function openPanel(html, activeElement) {
-  if (activeEl) activeEl.classList.remove("skill-node--active", "arch-layer--active");
+  if (activeEl) activeEl.classList.remove("skill-node--active", "is-active");
   activeEl = activeElement;
-  if (activeEl) activeEl.classList.add(activeEl.classList.contains("arch-layer") ? "arch-layer--active" : "skill-node--active");
+  if (activeEl) {
+    if (activeEl.classList.contains("skill-node")) activeEl.classList.add("skill-node--active");
+    else activeEl.classList.add("is-active");
+  }
   panelContent.innerHTML = html;
   panelContent.querySelectorAll(".compose-link").forEach(link => {
     link.addEventListener("click", () => {
@@ -797,6 +1321,7 @@ function openPanel(html, activeElement) {
   panel.setAttribute("aria-hidden", "false");
   overlay.classList.add("panel-overlay--visible");
   document.body.style.overflow = "hidden";
+  panel.scrollTop = 0;
 }
 
 function closePanel() {
@@ -804,41 +1329,60 @@ function closePanel() {
   panel.setAttribute("aria-hidden", "true");
   overlay.classList.remove("panel-overlay--visible");
   document.body.style.overflow = "";
-  if (activeEl) { activeEl.classList.remove("skill-node--active", "arch-layer--active"); activeEl = null; }
+  if (activeEl) { activeEl.classList.remove("skill-node--active", "is-active"); activeEl = null; }
 }
 document.getElementById("panelClose").addEventListener("click", closePanel);
 overlay.addEventListener("click", closePanel);
 document.addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); });
 
-/* ============ LAYER PANELS ============ */
-document.querySelectorAll(".arch-layer").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const key = btn.getAttribute("data-layer");
-    const d = LAYERS_DATA[key];
-    if (!d) return;
-    const html = '<div class="slide-panel__badge slide-panel__badge--' + d.badgeClass + '">' + d.badge + '</div>' +
-      '<h3 class="slide-panel__title">' + d.name + '</h3>' +
-      '<p class="slide-panel__section-label">What this layer does</p>' +
-      '<div class="bench-note" style="margin-bottom:var(--space-lg)"><p>' + d.what + '</p></div>' +
-      '<p class="slide-panel__section-label">What goes wrong</p>' +
-      '<div class="bench-note" style="margin-bottom:var(--space-lg);border-left-color:var(--gray-500)"><p>' + d.problem + '</p></div>' +
-      '<p class="slide-panel__section-label">What root.node does</p>' +
-      '<div class="bench-note" style="margin-bottom:var(--space-lg);border-left-color:var(--scope-' + d.scope + ')"><p>' + d.fix + '</p></div>' +
-      (d.activates.length ? '<p class="slide-panel__section-label">Activates on</p><div class="slide-panel__pills">' + d.activates.map(k => '<span class="keyword-pill">' + k + '</span>').join("") + '</div>' : '') +
-      '<p class="slide-panel__section-label">Connects to</p>' +
-      '<div class="slide-panel__pills">' + d.connects.map(c => '<span class="keyword-pill">' + c + '</span>').join("") + '</div>';
-    openPanel(html, btn);
+/* ============ PANEL DISPATCH (rows, cross-band, dual-band, pills) ============ */
+function renderPanelHtml(d) {
+  const scopeForBorder = d.scope || 'cross';
+  const what_section = d.what ? '<p class="slide-panel__section-label">What this is</p><div class="bench-note" style="margin-bottom:var(--space-lg)"><p>' + d.what + '</p></div>' : '';
+  const problem_section = d.problem ? '<p class="slide-panel__section-label">What goes wrong</p><div class="bench-note" style="margin-bottom:var(--space-lg);border-left-color:var(--gray-500)"><p>' + d.problem + '</p></div>' : '';
+  const fix_section = d.fix ? '<p class="slide-panel__section-label">What root.node does</p><div class="bench-note" style="margin-bottom:var(--space-lg);border-left-color:var(--scope-' + scopeForBorder + ')"><p>' + d.fix + '</p></div>' : '';
+  const activates_section = (d.activates && d.activates.length) ? '<p class="slide-panel__section-label">Activates on</p><div class="slide-panel__pills">' + d.activates.map(k => '<span class="keyword-pill">' + k + '</span>').join("") + '</div>' : '';
+  const connects_section = (d.connects && d.connects.length) ? '<p class="slide-panel__section-label">Connects to</p><div class="slide-panel__pills">' + d.connects.map(c => '<span class="keyword-pill">' + c + '</span>').join("") + '</div>' : '';
+  const cta_section = d.releaseUrl ? '<div class="panel__cta"><a class="panel__cta-link" href="' + d.releaseUrl + '" target="_blank" rel="noopener noreferrer" aria-label="View ' + d.name + ' on GitHub (opens in new tab)">View on GitHub →</a></div>' : '';
+  return '<div class="slide-panel__badge slide-panel__badge--' + d.badgeClass + '">' + d.badge + '</div>' +
+    '<h3 class="slide-panel__title">' + d.name + '</h3>' +
+    what_section + problem_section + fix_section + activates_section + connects_section + cta_section;
+}
+
+function dispatchDetail(key, triggerEl) {
+  const d = LAYERS_DATA[key];
+  if (d) {
+    openPanel(renderPanelHtml(d), triggerEl);
+    return;
+  }
+  // Fallback for legacy SKILLS_DATA entries (project-audit, global-audit, behavioral-tuning, etc.)
+  const s = findSkillById(key);
+  if (s) openSkillPanel(s, findGroupBySkillId(key), triggerEl);
+}
+
+document.querySelectorAll('[data-detail]').forEach(el => {
+  const fire = () => dispatchDetail(el.getAttribute('data-detail'), el);
+  el.addEventListener('click', e => {
+    if (e.target.closest('[data-skill-pill]')) return; // inner pill handler will fire
+    fire();
+  });
+  if (el.hasAttribute('tabindex')) {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fire(); }
+    });
+  }
+});
+document.querySelectorAll('[data-skill-pill]').forEach(pill => {
+  pill.addEventListener('click', e => {
+    e.stopPropagation();
+    dispatchDetail(pill.getAttribute('data-skill-pill'), pill);
   });
 });
 
-/* ============ SKILLS GRID (5 groups, 2 columns) ============ */
-function buildSkillsGrid() {
-  const coreGroups = ["diagnose", "build", "optimize"];
-  const supportingGroups = ["blocks", "domains"];
-  const coreGrid = document.getElementById("coreSkillsGrid");
-  const supportGrid = document.getElementById("supportingSkillsGrid");
-
-  // Core Skills — 3 cards
+/* SKILLS GRID renderer removed — Skills section now uses static tables */
+function _removedBuildSkillsGrid_DO_NOT_CALL() { return;
+  // dead code from original buildSkillsGrid kept until full cleanup
+  /*
   coreGroups.forEach(key => {
     const group = SKILLS_DATA[key];
     if (!group) return;
@@ -883,9 +1427,11 @@ function buildSkillsGrid() {
     card.appendChild(items);
     supportGrid.appendChild(card);
   });
+  */
 }
 
 function openSkillPanel(skill, groupName, node) {
+  const ctaUrl = skill.releaseUrl || 'https://github.com/drayline/rootnode-skills';
   const html = '<div class="slide-panel__badge slide-panel__badge--skill">' + groupName + '</div>' +
     '<h3 class="slide-panel__title">' + skill.name + '</h3>' +
     '<div class="slide-panel__desc"><p>' + skill.desc + '</p></div>' +
@@ -893,7 +1439,7 @@ function openSkillPanel(skill, groupName, node) {
     '<div class="slide-panel__pills">' + skill.keywords.map(k => '<span class="keyword-pill">' + k + '</span>').join("") + '</div>' +
     '<p class="slide-panel__section-label">Composes with</p>' +
     '<div class="slide-panel__pills">' + skill.composes.map(id => '<button class="compose-link" data-compose-id="' + id + '">' + id + '</button>').join("") + '</div>' +
-    '<div class="slide-panel__cta"><a href="https://github.com/drayline/rootnode-skills" class="btn-primary" target="_blank" rel="noopener noreferrer">View on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a></div>';
+    '<div class="panel__cta"><a class="panel__cta-link" href="' + ctaUrl + '" target="_blank" rel="noopener noreferrer" aria-label="View ' + skill.name + ' on GitHub (opens in new tab)">View on GitHub →</a></div>';
   openPanel(html, node);
 }
 
@@ -953,8 +1499,6 @@ const co = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.5 });
 document.querySelectorAll("[data-count]").forEach(el => co.observe(el));
-
-buildSkillsGrid();
 </script>
 </body>
 </html>
